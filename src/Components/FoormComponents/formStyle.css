@@ -1,3 +1,8 @@
+.mainFormArticle {
+  display: flex;
+  flex-direction: column;
+}
+
 /* style for upper progress bar */
 .mainProgressCountersDivs {
   background-color: rgb(56, 64, 71);
@@ -83,7 +88,9 @@
 
 /* style for form pages */
 .mainFormBody {
+  height: 100%;
   padding: 1rem;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,4 +187,50 @@
   background-color: rgb(59, 179, 189);
   color: #fff;
   border: none;
+}
+
+/* styling for form photo page */
+
+.formPhotoPage {
+  max-width: 900px;
+  background-color: #fff;
+  padding: 1rem;
+}
+
+.formPhotoPage > div {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr;
+  grid-template-rows: 1fr;
+  gap: 0.6rem;
+}
+.photoTips {
+  /* width: 250px; */
+}
+.photoTipsList {
+  list-style: none;
+}
+.imageUploaderDiv {
+  display: flex;
+  gap: 0.5rem;
+}
+.imageUploaderDiv > button {
+  padding: 0.5rem 1rem;
+}
+
+/* drag and drop div */
+.dragndropdiv {
+  height: 250px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* drag and drop div */
+
+.ImageShowerDiv {
+  height: 300px;
+  border: 1px solid black;
+}
+input[type="range"] {
+  width: 100%;
 }
