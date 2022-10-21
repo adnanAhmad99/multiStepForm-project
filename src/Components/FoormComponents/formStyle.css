@@ -1,0 +1,183 @@
+/* style for upper progress bar */
+.mainProgressCountersDivs {
+  background-color: rgb(56, 64, 71);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.individualProgressCounterDiv {
+  margin: 0rem 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(138, 149, 158);
+}
+.arrowSpan {
+  min-width: 12px;
+  height: 9px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  margin: 0rem 0.3rem;
+}
+.arrowSpan > span {
+  min-height: 1px;
+  background-color: rgb(138, 149, 158);
+  min-width: 8px;
+}
+.arrowSpan > span:nth-child(1) {
+  transform: rotate(36deg);
+}
+.arrowSpan > span:nth-child(2) {
+  transform: rotate(323deg);
+}
+
+.progressNavbarContainer {
+  display: flex;
+  cursor: pointer;
+}
+
+.numberSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0rem 0.3rem;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgb(56, 64, 71);
+  border: 1px solid rgb(138, 149, 158);
+}
+.progressBarPageName {
+  margin-left: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.activeProgressBarNumber {
+  background-color: #fff;
+  color: black;
+}
+.activeProgressBarpage {
+  color: #fff;
+}
+
+/* making responsive */
+
+@media screen and (max-width: 1210px) {
+  .progressBarPageName {
+    display: none;
+  }
+}
+@media screen and (max-width: 640px) {
+  .arrowSpan {
+    display: none;
+  }
+  .numberSpan {
+    margin: 0rem 0.1rem;
+  }
+}
+
+/* style for form pages */
+.mainFormBody {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(237, 240, 240);
+}
+
+/* style for About form page */
+.aboutFormPage {
+  max-width: 800px;
+  width: 100%;
+  padding: 1rem;
+  background-color: #fff;
+}
+.aboutFormPage > h2 {
+  margin-bottom: 1rem;
+}
+
+.aboutFormPageForm {
+  max-width: 500px;
+  margin-right: auto;
+}
+
+.languageUpperLevelDiv,
+.languagesUpperHeaddings {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.languageUpperLevelDiv > div {
+  width: 48%;
+}
+.languageUpperLevelDiv > .deleteLanguageDiv {
+  width: 4%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.languagesAdditionDiv {
+  display: inline-block;
+  color: rgb(59, 179, 189);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgb(59, 179, 189);
+  cursor: pointer;
+  margin: 0.5rem 0rem;
+}
+.deleteLanguageDiv > svg {
+  display: inline-block;
+  fill: rgb(59, 179, 189);
+}
+.deleteLanguageDiv:hover {
+  cursor: pointer;
+}
+
+.languagesUpperHeaddings > p {
+  /* flex-grow: 1; */
+  width: 50%;
+}
+
+.phoneNumberFormDiv {
+  padding: 0.5rem;
+  border: 1px solid black;
+}
+
+.phoneNumberFormDiv input {
+  border: none;
+  outline: none;
+}
+
+.ageConfirmationDiv > span:hover {
+  cursor: pointer;
+}
+
+.ageConfirmationSvgSpan {
+  display: inline-block;
+  min-width: 18px;
+  height: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.476);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+.acitveAgeCheckbox {
+  background-color: rgb(59, 179, 189);
+  border: none;
+}
+.ageConfirmationSvg {
+  fill: white;
+}
+.aboutFormPageForm button[type="submit"] {
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  background-color: rgb(59, 179, 189);
+  color: #fff;
+  border: none;
+}
