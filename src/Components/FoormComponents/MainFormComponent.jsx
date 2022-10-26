@@ -21,8 +21,6 @@ export default function MainFormComponent() {
     "Description",
     "Video",
     "Availability",
-    "Pricing",
-    "Discount",
   ];
   const [mainProgressController, setmainProgressController] = useState("About");
   const [upperLevelDataContainer, setupperLevelDataContainer] = useState({
@@ -104,18 +102,6 @@ export default function MainFormComponent() {
         ) : null}
         {mainProgressController == "Availability" ? (
           <FormAvailabilityPage
-            upperLevelDataContainer={upperLevelDataContainer}
-            handleUpperLevelComponentData={handleUpperLevelComponentData}
-          />
-        ) : null}
-        {mainProgressController == "Pricing" ? (
-          <FormPricingPage
-            upperLevelDataContainer={upperLevelDataContainer}
-            handleUpperLevelComponentData={handleUpperLevelComponentData}
-          />
-        ) : null}
-        {mainProgressController == "Discount" ? (
-          <FormDiscountPage
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />

@@ -1,19 +1,31 @@
 import React, { useState } from "react";
 
 export default function FormCertificationPage() {
-  const [teachingCertificatesArray, setteachingCertificatesArray] = useState({
-    subjectName: "",
-    subjectNameError: "",
-    certificateName: "",
-    certificateNameError: "",
-    descriptionName: "",
-    descriptionNameError: "",
-    issuedBy: "",
-    issuedByError: "",
-    startStudyYear: "",
-    endStudyYear: "",
-    studyYearError: "",
-  });
+  const [teachingCertificatesArray, setteachingCertificatesArray] = useState([
+    {
+      subjectName: "",
+      subjectNameError: "",
+      certificateName: "",
+      certificateNameError: "",
+      certificateDescription: "",
+      certificateDescriptionError: "",
+      certificateIssuer: "",
+      certificateIssuerError: "",
+      startStudyYear: "",
+      endStudyYear: "",
+      studyYearError: "",
+    },
+  ]);
+
+  // functions
+  const handleNewDataChanges = (e, indexposition) => {
+    console.log(e.target);
+    console.log(indexposition);
+  };
+  const handleImageFileUploadData = (e, indexposition) => {
+    console.log(e.target);
+    console.log(indexposition);
+  };
 
   const handleTestData = () => {
     const fd = new FormData();
@@ -47,10 +59,15 @@ export default function FormCertificationPage() {
         profile credibility and get more students
       </p>
       <div>
-        <TeachingCertificateDivs />
-        {/* {teachingCertificatesArray.map((element,index)=>(
-
-        ))} */}
+        {teachingCertificatesArray.map((data, index) => (
+          <TeachingCertificateDivs
+            key={`certificateIndexKey${index}`}
+            parantData={data}
+            handleParentData={handleNewDataChanges}
+            handleImageData={handleImageFileUploadData}
+            index={index}
+          />
+        ))}
       </div>
       <div>
         <button>Add another certificate</button>{" "}
@@ -65,13 +82,18 @@ export default function FormCertificationPage() {
   );
 }
 
-function TeachingCertificateDivs() {
+function TeachingCertificateDivs({
+  parantData,
+  handleParentData,
+  handleImageData,
+  index,
+}) {
   return (
     <div className="teachingCertificateIndividualDiv">
       <div className="flexDiv">
         <label htmlFor="randomId:subjecttaught5293000">Subject</label>
         <select
-          name="subjectTaught"
+          name="subjectName"
           // value={mainDataContainer.subjectTaught}
           // onChange={handleInputValueChange}
           id="randomId:subjecttaught5293000"
@@ -90,34 +112,39 @@ function TeachingCertificateDivs() {
       </div>
       <div className="flexDiv">
         <label htmlFor="radnomId:opi395478">Certificate</label>
+        <input type="text" name="certificateName" />
+        <p className="validationError">Error</p>
+      </div>
+      <div className="flexDiv">
+        <label htmlFor="radnomId:opi395478" name="certificateDescription">
+          Description
+        </label>
         <input type="text" />
         <p className="validationError">Error</p>
       </div>
       <div className="flexDiv">
-        <label htmlFor="radnomId:opi395478">Description</label>
-        <input type="text" />
-        <p className="validationError">Error</p>
-      </div>
-      <div className="flexDiv">
-        <label htmlFor="radnomId:opi395478">Issued by</label>
+        <label htmlFor="radnomId:opi395478" name="certificateIssuer">
+          Issued by
+        </label>
         <input type="text" />
         <p className="validationError">Error</p>
       </div>
       <div className="selectDivEducationPage">
         <label>Years of study</label>
         <div>
-          <select placeholder="Select">
+          <select placeholder="Select" name="startStudyYear">
             <option value="2000">2000</option>
             <option value="2001">2001</option>
             <option value="2002">2002</option>
           </select>
           <span className="dashAdderSpan"></span>
-          <select>
+          <select name="endStudyYear">
             <option value="2000">2000</option>
             <option value="2001">2001</option>
             <option value="2002">2002</option>
           </select>
         </div>
+        <p className="validationError">Error</p>
       </div>
       <div className="certificateImageAdditionDiv">
         <div className="certificateInfoDiv">
@@ -129,24 +156,21 @@ function TeachingCertificateDivs() {
               profile
             </p>
           </div>
-          <div className="certificateUploadDiv">
+        </div>
+        <div className="certificateUploadDiv">
+          <div>
             <div>
-              <div>
-                <label htmlFor="randomId:fityu419278">Upload</label>
-                <input
-                  type="file"
-                  id="randomId:fityu419278"
-                  className="noDisplay"
-                />
-              </div>
-              <span>
-                <span>JPG or PNG format.</span>
-                <span>maximum size of 20MB</span>
-              </span>
+              <label htmlFor="randomId:fityu419278">Upload</label>
+              <input
+                type="file"
+                id="randomId:fityu419278"
+                className="noDisplay"
+              />
             </div>
-            <div className="certificateImageDiv">
-              <img src="" alt="image go here" />
-            </div>
+            <span>JPG or PNG format. maximum size of 20MB</span>
+          </div>
+          <div className="certificateImageDiv">
+            <img src="" alt="image go here" />
           </div>
         </div>
       </div>
