@@ -13,10 +13,13 @@ export default function FormCertificationPage() {
     startStudyYear: "",
     endStudyYear: "",
     studyYearError: "",
+    certificateImageData: "",
   };
   const [teachingCertificatesArray, setteachingCertificatesArray] = useState([
     initialData,
   ]);
+  const [teachingCertificateStatus, setTeachingCertificateStatus] =
+    useState(false);
 
   // functions
   const handleNewDataChanges = (e, indexposition) => {
@@ -29,7 +32,7 @@ export default function FormCertificationPage() {
 
     setteachingCertificatesArray(newDataArray);
   };
-  const handleImageFileUploadData = (e, indexposition) => {
+  const handleImageFileUploadData = (e, indexposition, imageData) => {
     console.log(e.target);
     console.log(indexposition);
   };
@@ -41,28 +44,87 @@ export default function FormCertificationPage() {
     setteachingCertificatesArray(newDataArray);
   };
 
-  const handleTestData = () => {
-    const fd = new FormData();
-    for (let i = 0; i < 4; i++) {
-      fd.append("products", i);
+  const handleDataSending = () => {
+    // checking validations
+    const internalErrorArray = [];
+    let errorStatus = false;
+
+    if (!teachingCertificateStatus) {
+      for (let data of teachingCertificatesArray) {
+        const internalDataObject = {};
+
+        if (!data.subjectName) {
+          internalDataObject.subjectNameError = "This field is required";
+          errorStatus = true;
+        } else {
+          internalDataObject.subjectNameError = "";
+          errorStatus = false;
+        }
+        if (!data.certificateName) {
+          internalDataObject.certificateNameError = "This field is required";
+          errorStatus = true;
+        } else {
+          internalDataObject.certificateNameError = "";
+          errorStatus = false;
+        }
+        if (!data.certificateDescription) {
+          internalDataObject.certificateDescriptionError =
+            "This field is required";
+          errorStatus = true;
+        } else {
+          internalDataObject.certificateDescriptionError = "";
+          errorStatus = false;
+        }
+        if (!data.certificateIssuer) {
+          internalDataObject.certificateIssuerError = "This field is required";
+          errorStatus = true;
+        } else {
+          internalDataObject.certificateIssuerError = "";
+          errorStatus = false;
+        }
+        if (!data.startStudyYear || !data.endStudyYear) {
+          internalDataObject.studyYearError = "This field is required";
+          errorStatus = true;
+        } else {
+          internalDataObject.studyYearError = "";
+          errorStatus = false;
+        }
+
+        internalErrorArray.push({ ...data, ...internalDataObject });
+      }
+
+      // console.log(internalErrorArray);
+      setteachingCertificatesArray(internalErrorArray);
     }
 
-    fetch("http://localhost:3030/", {
-      method: "POST",
-      body: fd,
-    })
-      .then((data) => {
-        if (data.ok) {
-          return data.json();
-        }
-        throw new Error("unable to receive data");
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!errorStatus) {
+      console.log("validation passed");
+      const fd = new FormData();
+
+      if (!teachingCertificateStatus) {
+        fd.append("noEducationCertificate", true);
+      } else {
+        fd.append("educationCertificateData", teachingCertificatesArray);
+        fd.append("noEducationCertificate", false);
+      }
+
+      // fetch("http://localhost:3030/", {
+      //   method: "POST",
+      //   body: fd,
+      // })
+      //   .then((data) => {
+      //     if (data.ok) {
+      //       return data.json();
+      //     }
+      //     throw new Error("unable to receive data");
+      //   })
+      //   .then((data) => {
+      //     console.log(data);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+    }
   };
 
   return (
@@ -96,11 +158,35 @@ export default function FormCertificationPage() {
           Add another certificate
         </button>
       </div>
-      <div>
-        <p>I don't have any teaching certificate yet</p>
+      <div className="flexDivRow">
+        <span
+          className={`ageConfirmationSvgSpan ${
+            teachingCertificateStatus ? "acitveAgeCheckbox" : ""
+          }`}
+          onClick={() =>
+            setTeachingCertificateStatus(!teachingCertificateStatus)
+          }
+        >
+          <svg
+            height="9"
+            viewBox="0 0 11 9"
+            width="11"
+            className="ageConfirmationSvg"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M4 5.586L9.293.293l1.414 1.414L4 8.414.293 4.707l1.414-1.414z"></path>
+          </svg>
+        </span>
+        <span
+          onClick={() =>
+            setTeachingCertificateStatus(!teachingCertificateStatus)
+          }
+        >
+          I don't have any teaching certificate yet
+        </span>
       </div>
       <div>
-        <button onClick={handleTestData}>next</button>
+        <button onClick={handleDataSending}>next</button>
       </div>
     </article>
   );
@@ -124,6 +210,15 @@ function TeachingCertificateDivs({
     // console.log(newData.splice(dataIndex));
     setstudyYearEndArray(newData.splice(dataIndex));
     handleParentData(e, index);
+  };
+
+  // handling image data
+  const {imageData,setimageData} = useState("")
+
+  const handleCertificateImageData = (e) => {
+    const { files } = e.target;
+    console.log(files);
+    // if()
   };
 
   return (
@@ -242,6 +337,8 @@ function TeachingCertificateDivs({
                   type="file"
                   id="randomId:fityu419278"
                   className="noDisplay"
+                  onChange={handleCertificateImageData}
+                  accept=".png,.jpg"
                 />
               </div>
               <span>JPG or PNG format. maximum size of 20MB</span>
