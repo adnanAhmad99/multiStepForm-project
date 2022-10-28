@@ -13,7 +13,8 @@ export default function FormCertificationPage() {
     startStudyYear: "",
     endStudyYear: "",
     studyYearError: "",
-    certificateImageData: "",
+    certificateImageData: {},
+    certificateimageError: false,
   };
   const [teachingCertificatesArray, setteachingCertificatesArray] = useState([
     initialData,
@@ -32,10 +33,27 @@ export default function FormCertificationPage() {
 
     setteachingCertificatesArray(newDataArray);
   };
-  const handleImageFileUploadData = (e, indexposition, imageData) => {
-    console.log(e.target);
-    console.log(indexposition);
+
+  const handleImageFileUploadData = (indexposition, imageData) => {
+    console.log(imageData);
+    const newDataArray = [...teachingCertificatesArray];
+    const newDataEntered = {
+      ...newDataArray[indexposition],
+      certificateImageData: imageData,
+    };
+
+    newDataArray[indexposition] = newDataEntered;
+
+    setteachingCertificatesArray(newDataArray);
   };
+
+  const handleCertificateImageError = (indexPosition, dataStatus) => {
+    const newDataArray = [...teachingCertificatesArray];
+    newDataArray[indexPosition].certificateimageError = dataStatus;
+
+    setteachingCertificatesArray(newDataArray);
+  };
+
   const handleCertificationDeleltion = (indexPosition) => {
     // console.log(indexPosition);
     const newDataArray = teachingCertificatesArray.filter(
@@ -99,31 +117,87 @@ export default function FormCertificationPage() {
 
     if (!errorStatus) {
       console.log("validation passed");
-      const fd = new FormData();
 
-      if (!teachingCertificateStatus) {
+      if (teachingCertificateStatus) {
+        const fd = new FormData();
         fd.append("noEducationCertificate", true);
-      } else {
-        fd.append("educationCertificateData", teachingCertificatesArray);
-        fd.append("noEducationCertificate", false);
-      }
 
-      // fetch("http://localhost:3030/", {
-      //   method: "POST",
-      //   body: fd,
-      // })
-      //   .then((data) => {
-      //     if (data.ok) {
-      //       return data.json();
-      //     }
-      //     throw new Error("unable to receive data");
-      //   })
-      //   .then((data) => {
-      //     console.log(data);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+        fetch("http://localhost:3030/api/formInformation/teachingCertificate", {
+          method: "POST",
+          body: fd,
+        })
+          .then((data) => {
+            if (data.ok) {
+              return data.json();
+            }
+            throw new Error("unable to receive data");
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        for (let [
+          indexPosition,
+          dataToSend,
+        ] of teachingCertificatesArray.entries()) {
+          const fd = new FormData();
+
+          const certificateImageData = dataToSend.certificateImageData;
+
+          delete dataToSend.certificateImageData;
+
+          // console.log(dataToSend);
+          // console.log(certificateImageData);
+
+          fd.append("educationCertificateData", JSON.stringify(dataToSend));
+          fd.append("noEducationCertificate", false);
+          fd.append("elementIndexPosition", indexPosition);
+
+          // console.log(Object.keys(certificateImageData).length);
+          // console.log(!certificateImageData.name);
+          // console.log(typeof certificateImageData);
+          // console.log(certificateImageData);
+
+          if (certificateImageData.name) {
+            console.log("sending certificate");
+            fd.append(
+              "certificateImage",
+              certificateImageData,
+              certificateImageData.name
+            );
+          }
+
+          fetch(
+            "http://localhost:3030/api/formInformation/teachingCertificate",
+            {
+              method: "POST",
+              body: fd,
+            }
+          )
+            .then((data) => {
+              if (data.ok) {
+                return data.json();
+              }
+              throw new Error("unable to receive data");
+            })
+            .then((data) => {
+              console.log(data);
+              const newData = JSON.parse(data);
+              if (newData.message == "validation error") {
+                const newDataArray = [...teachingCertificatesArray];
+                const newDataErrorObject = newData.validationData;
+                newDataArray[newData.elementIndexPosition] = newDataErrorObject;
+                setteachingCertificatesArray(newDataArray);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
     }
   };
 
@@ -140,9 +214,10 @@ export default function FormCertificationPage() {
             key={`certificateIndexKey${index}`}
             parentData={data}
             handleParentData={handleNewDataChanges}
-            handleImageData={handleImageFileUploadData}
-            index={index}
+            handleImageParentData={handleImageFileUploadData}
+            parentIndex={index}
             handleCertificationDeleltion={handleCertificationDeleltion}
+            handleCertificateImageError={handleCertificateImageError}
           />
         ))}
       </div>
@@ -195,9 +270,10 @@ export default function FormCertificationPage() {
 function TeachingCertificateDivs({
   parentData,
   handleParentData,
-  handleImageData,
+  handleImageParentData,
   handleCertificationDeleltion,
-  index,
+  handleCertificateImageError,
+  parentIndex,
 }) {
   // setting for study year end
   const dateArray = ["2000", "2001", "2002", "2003"];
@@ -209,21 +285,46 @@ function TeachingCertificateDivs({
     const dataIndex = newData.indexOf(e.target.value);
     // console.log(newData.splice(dataIndex));
     setstudyYearEndArray(newData.splice(dataIndex));
-    handleParentData(e, index);
+    handleParentData(e, parentIndex);
   };
 
   // handling image data
-  const {imageData,setimageData} = useState("")
+  const [imageData, setimageData] = useState("");
 
   const handleCertificateImageData = (e) => {
     const { files } = e.target;
-    console.log(files);
-    // if()
+    if (files && !files.length) {
+      return;
+    }
+
+    const currentImage = files[0];
+    const acceptedExt = ["image/png", "image/jpeg", "image/jpg"];
+
+    // image validation checking
+    if (!acceptedExt.includes(currentImage.type)) {
+      console.log("type checking");
+      handleCertificateImageError(parentIndex, true);
+
+      return;
+    } else if (currentImage.size >= 20000000) {
+      console.log("size checking");
+      handleCertificateImageError(parentIndex, true);
+      return;
+    }
+
+    handleCertificateImageError(parentIndex, false);
+
+    const imageUrl = URL.createObjectURL(currentImage);
+    // console.log(imageUrl);
+    setimageData(imageUrl);
+
+    // console.log(currentImage);
+    handleImageParentData(parentIndex, currentImage);
   };
 
   return (
     <div className="teachingCertificateIndividualDiv">
-      <button onClick={() => handleCertificationDeleltion(index)}>
+      <button onClick={() => handleCertificationDeleltion(parentIndex)}>
         Delete
       </button>
       <div>
@@ -232,7 +333,7 @@ function TeachingCertificateDivs({
           <select
             name="subjectName"
             value={parentData.subjectName}
-            onChange={(e) => handleParentData(e, index)}
+            onChange={(e) => handleParentData(e, parentIndex)}
             id="randomId:subjecttaught5293000"
           >
             <option value=""></option>
@@ -251,7 +352,7 @@ function TeachingCertificateDivs({
             type="text"
             value={parentData.certificateName}
             name="certificateName"
-            onChange={(e) => handleParentData(e, index)}
+            onChange={(e) => handleParentData(e, parentIndex)}
           />
           {parentData.certificateNameError && (
             <p className="validationError">{parentData.certificateNameError}</p>
@@ -263,7 +364,7 @@ function TeachingCertificateDivs({
             type="text"
             value={parentData.certificateDescription}
             name="certificateDescription"
-            onChange={(e) => handleParentData(e, index)}
+            onChange={(e) => handleParentData(e, parentIndex)}
           />
           {parentData.certificateDescriptionError && (
             <p className="validationError">
@@ -277,7 +378,7 @@ function TeachingCertificateDivs({
             type="text"
             name="certificateIssuer"
             value={parentData.certificateIssuer}
-            onChange={(e) => handleParentData(e, index)}
+            onChange={(e) => handleParentData(e, parentIndex)}
           />
           {parentData.certificateIssuerError && (
             <p className="validationError">
@@ -304,7 +405,7 @@ function TeachingCertificateDivs({
             <select
               name="endStudyYear"
               value={parentData.endStudyYear}
-              onChange={(e) => handleParentData(e, index)}
+              onChange={(e) => handleParentData(e, parentIndex)}
               disabled={parentData.startStudyYear ? false : true}
             >
               {studyYearEndArray.map((element, index) => (
@@ -332,7 +433,12 @@ function TeachingCertificateDivs({
           <div className="certificateUploadDiv">
             <div>
               <div>
-                <label htmlFor="randomId:fityu419278">Upload</label>
+                <label
+                  style={{ border: "1px solid black ", cursor: "pointer" }}
+                  htmlFor="randomId:fityu419278"
+                >
+                  Upload
+                </label>
                 <input
                   type="file"
                   id="randomId:fityu419278"
@@ -341,11 +447,28 @@ function TeachingCertificateDivs({
                   accept=".png,.jpg"
                 />
               </div>
-              <span>JPG or PNG format. maximum size of 20MB</span>
+              <span
+                className={
+                  parentData.certificateimageError ? "validationError" : null
+                }
+              >
+                JPG or PNG format. maximum size of 20MB
+              </span>
             </div>
-            <div className="certificateImageDiv">
-              <img src="" alt="image go here" />
-            </div>
+            {imageData && (
+              <div className="certificateImageDiv">
+                <img src={imageData} alt="image go here" />
+                <button
+                  onClick={() => {
+                    setimageData("");
+                    handleCertificateImageError(parentIndex, false);
+                    handleImageParentData(parentIndex, {});
+                  }}
+                >
+                  clear
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
