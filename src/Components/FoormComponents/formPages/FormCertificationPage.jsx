@@ -15,12 +15,15 @@ export default function FormCertificationPage() {
     studyYearError: "",
     certificateImageData: {},
     certificateimageError: false,
+    generalErrors: "",
   };
   const [teachingCertificatesArray, setteachingCertificatesArray] = useState([
     initialData,
   ]);
   const [teachingCertificateStatus, setTeachingCertificateStatus] =
     useState(false);
+
+  const [formUploadingStatus, setformUploadingStatus] = useState("");
 
   // functions
   const handleNewDataChanges = (e, indexposition) => {
@@ -76,14 +79,12 @@ export default function FormCertificationPage() {
           errorStatus = true;
         } else {
           internalDataObject.subjectNameError = "";
-          errorStatus = false;
         }
         if (!data.certificateName) {
           internalDataObject.certificateNameError = "This field is required";
           errorStatus = true;
         } else {
           internalDataObject.certificateNameError = "";
-          errorStatus = false;
         }
         if (!data.certificateDescription) {
           internalDataObject.certificateDescriptionError =
@@ -91,21 +92,18 @@ export default function FormCertificationPage() {
           errorStatus = true;
         } else {
           internalDataObject.certificateDescriptionError = "";
-          errorStatus = false;
         }
         if (!data.certificateIssuer) {
           internalDataObject.certificateIssuerError = "This field is required";
           errorStatus = true;
         } else {
           internalDataObject.certificateIssuerError = "";
-          errorStatus = false;
         }
         if (!data.startStudyYear || !data.endStudyYear) {
           internalDataObject.studyYearError = "This field is required";
           errorStatus = true;
         } else {
           internalDataObject.studyYearError = "";
-          errorStatus = false;
         }
 
         internalErrorArray.push({ ...data, ...internalDataObject });
@@ -117,10 +115,11 @@ export default function FormCertificationPage() {
 
     if (!errorStatus) {
       console.log("validation passed");
+      setformUploadingStatus("loading...");
 
       if (teachingCertificateStatus) {
         const fd = new FormData();
-        fd.append("noEducationCertificate", true);
+        fd.append("noTeachingCertificate", true);
 
         fetch("http://localhost:3030/api/formInformation/teachingCertificate", {
           method: "POST",
@@ -152,9 +151,13 @@ export default function FormCertificationPage() {
           // console.log(dataToSend);
           // console.log(certificateImageData);
 
-          fd.append("educationCertificateData", JSON.stringify(dataToSend));
-          fd.append("noEducationCertificate", false);
+          fd.append("teachingCertificateData", JSON.stringify(dataToSend));
+          fd.append("noTeachingCertificate", false);
           fd.append("elementIndexPosition", indexPosition);
+
+          if (indexPosition == 0) {
+            fd.append("firstCertificate", true);
+          }
 
           // console.log(Object.keys(certificateImageData).length);
           // console.log(!certificateImageData.name);
@@ -186,9 +189,15 @@ export default function FormCertificationPage() {
             .then((data) => {
               console.log(data);
               const newData = JSON.parse(data);
-              if (newData.message == "validation error") {
+              if (
+                newData.message == "validation error" ||
+                newData.message == "general error"
+              ) {
                 const newDataArray = [...teachingCertificatesArray];
-                const newDataErrorObject = newData.validationData;
+                const newDataErrorObject = {
+                  ...newData.validationData,
+                  certificateImageData: certificateImageData,
+                };
                 newDataArray[newData.elementIndexPosition] = newDataErrorObject;
                 setteachingCertificatesArray(newDataArray);
               }
@@ -199,6 +208,7 @@ export default function FormCertificationPage() {
         }
       }
     }
+    setformUploadingStatus("");
   };
 
   return (
@@ -263,6 +273,7 @@ export default function FormCertificationPage() {
       <div>
         <button onClick={handleDataSending}>next</button>
       </div>
+      {formUploadingStatus && <p>{formUploadingStatus}</p>}
     </article>
   );
 }
@@ -347,9 +358,10 @@ function TeachingCertificateDivs({
           )}
         </div>
         <div className="flexDiv">
-          <label htmlFor="radnomId:opi395478">Certificate</label>
+          <label htmlFor="radnomId:certopi395478">Certificate</label>
           <input
             type="text"
+            id="radnomId:certopi395478"
             value={parentData.certificateName}
             name="certificateName"
             onChange={(e) => handleParentData(e, parentIndex)}
@@ -365,6 +377,7 @@ function TeachingCertificateDivs({
             value={parentData.certificateDescription}
             name="certificateDescription"
             onChange={(e) => handleParentData(e, parentIndex)}
+            id="radnomId:opi395478"
           />
           {parentData.certificateDescriptionError && (
             <p className="validationError">
@@ -373,9 +386,10 @@ function TeachingCertificateDivs({
           )}
         </div>
         <div className="flexDiv">
-          <label htmlFor="radnomId:opi395478">Issued by</label>
+          <label htmlFor="radnomId:isued395478">Issued by</label>
           <input
             type="text"
+            id="radnomId:isued395478"
             name="certificateIssuer"
             value={parentData.certificateIssuer}
             onChange={(e) => handleParentData(e, parentIndex)}
@@ -472,6 +486,9 @@ function TeachingCertificateDivs({
           </div>
         </div>
       </div>
+      {parentData.generalErrors && (
+        <p className="validationError">{parentData.generalErrors}</p>
+      )}
     </div>
   );
 }
