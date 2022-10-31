@@ -1,4 +1,4 @@
-import MainFormComponent from "./Components/FoormComponents/MainFormComponent";
+import MainFormComponent from "./Components/FormComponents/MainFormComponent";
 
 function App() {
   return (
@@ -7,5 +7,5 @@ function App() {
     </div>
   );
 }
-   
+
 export default App;

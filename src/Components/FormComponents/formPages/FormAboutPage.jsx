@@ -820,16 +820,6 @@ export default function FormAboutPage({
                   <path d="M4 5.586L9.293.293l1.414 1.414L4 8.414.293 4.707l1.414-1.414z"></path>
                 </svg>
               </span>
-              {/* <input
-                type="checkbox"
-                // className="noDisplay"
-                value={ageConfirmation}
-                id="randomid:ageConsent293075y"
-                onChange={() => setageConfirmation(!ageConfirmation)}
-              />
-              <label htmlFor="randomid:ageConsent293075y">
-                I confirm I'm over 18
-              </label> */}
               <span>I confirm I'm over 18</span>
             </div>
             {mainValidationError.ageConfirmtionError && (
