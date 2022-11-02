@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Dropzone from "react-dropzone";
 // import Cropper from "react-easy-crop";
 
@@ -7,37 +7,33 @@ export default function FormPhotoPage({
   handleUpperLevelComponentData,
 }) {
   const [selectedImage, setselectedImage] = useState("");
-  const [image,setimage] =useState(null) 
+  const [image, setimage] = useState(null);
   const [selectedImageError, setselectedImageError] = useState(false);
-  // const [zoom, setzoom] = useState(0);
-  // const [crop, setcrop] = useState({ x: 0, y: 0 });
-  // const [croppedArea, setcroppedArea] = useState(null);
-  // const [rotate ]
+  const currentInput = useRef("");
 
-  // const handleCropCompletedFunction = (cropAreaPercentage, cropAreaPixel) => {
-  //   setcroppedArea(cropAreaPixel);
-  // };
-
-  const handleImageSending = ()=>{
-
-    const fd = new FormDate()
-
-
-
-    if(selectedImage){
-      fetch("http://localhost:3030/api/formInformation/profilePicture").then(data => {
-        if(data.ok){
-          return data.json()
-        }
-        throw Error("unable to receive data")
-      }).then(data =>{
-        console.log(data)
-      }).catch(err =>{
-        console.log(err.message)
+  const handleImageSending = () => {
+    if (image) {
+      const fd = new FormData();
+      console.log(image);
+      fd.append("profilePic", image, image.name);
+      fetch("http://localhost:3030/api/formInformation/profilePicture", {
+        method: "POST",
+        body: fd,
       })
-
+        .then((data) => {
+          if (data.ok) {
+            return data.json();
+          }
+          throw Error("unable to receive data");
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
     }
-  }
+  };
 
   const handleNewImage = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -45,14 +41,14 @@ export default function FormPhotoPage({
       if (!acceptedFilesExtArray.includes(e.target.files[0].type)) {
         setselectedImageError(true);
         return;
-      } else if (e.target.files[0].size >= 20000000) {
+      } else if (e.target.files[0].size >= 5000000) {
         setselectedImageError(true);
         return;
       }
 
       setselectedImageError(false);
 
-      setimage(e.target.files[0])
+      setimage(e.target.files[0]);
       const fileReader = new FileReader();
       fileReader.readAsDataURL(e.target.files[0]);
 
@@ -68,13 +64,14 @@ export default function FormPhotoPage({
       if (!acceptedFilesExtArray.includes(acceptedFiles[0].type)) {
         setselectedImageError(true);
         return;
-      } else if (acceptedFiles[0].size >= 20000000) {
+      } else if (acceptedFiles[0].size >= 5000000) {
         setselectedImageError(true);
         return;
       }
 
-      
       setselectedImageError(false);
+
+      setimage(acceptedFiles[0]);
       const fileReader = new FileReader();
       fileReader.readAsDataURL(acceptedFiles[0]);
 
@@ -116,7 +113,11 @@ export default function FormPhotoPage({
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
-                  <div className="dragndropdiv" {...getRootProps()}>
+                  <div
+                    className="dragndropdiv"
+                    {...getRootProps()}
+                    ref={currentInput}
+                  >
                     <input {...getInputProps()} />
                     <p>
                       Drag 'n' drop some files here, or click to select files
@@ -127,42 +128,17 @@ export default function FormPhotoPage({
             </Dropzone>
             <div className="imageEditorDiv">
               <div className="ImageShowerDiv">
-                {/* <Cropper
-                  image={selectedImage}
-                  zoom={zoom}
-                  crop={crop}
-                  aspect={1}
-                  objectFit="horizontal-cover"
-                  zoomWithScroll={false}
-                  onCropChange={setcrop}
-                  onZoomChange={setzoom}
-                  onCropComplete={handleCropCompletedFunction}
-                /> */}
                 <img src={selectedImage} alt="" />
               </div>
-              <p>
-                Drag the handles to crop your photo. Use zoom and rotation to
-                position.
-              </p>
-              {/* <div className="imageEditTooldiv">
-                <div>
-                  <p className="makebold"></p>
-                  <input
-                    type="range"
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    onChange={(e) => setzoom(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <p className="makebold"></p>
-                  <div>
-                    <button>previous</button>
-                    <button>next</button>
-                  </div>
-                </div>
-              </div> */}
+              <button
+                onClick={() => {
+                  setselectedImage("");
+                  setimage("");
+                  setselectedImageError(false);
+                }}
+              >
+                remove
+              </button>
             </div>
           </div>
         </div>
