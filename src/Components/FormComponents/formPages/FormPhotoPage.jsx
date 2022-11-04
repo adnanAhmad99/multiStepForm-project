@@ -7,7 +7,7 @@ export default function FormPhotoPage({
   handleUpperLevelComponentData,
 }) {
   const [selectedImage, setselectedImage] = useState("");
-  const [image, setimage] = useState(null);
+  const [image, setimage] = useState(upperLevelDataContainer.profileImage);
   const [selectedImageError, setselectedImageError] = useState(false);
   const currentInput = useRef("");
 
@@ -27,7 +27,13 @@ export default function FormPhotoPage({
           throw Error("unable to receive data");
         })
         .then((data) => {
-          console.log(data);
+          const newData = JSON.parse(data);
+          console.log(newData);
+          if (newData.message == "image received") {
+            handleUpperLevelComponentData("Certification", {
+              profileImage: newData.imageName,
+            });
+          }
         })
         .catch((err) => {
           console.log(err.message);

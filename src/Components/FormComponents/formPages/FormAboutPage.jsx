@@ -7,9 +7,16 @@ export default function FormAboutPage({
   handleUpperLevelComponentData,
 }) {
   //states for components
-  const [mainDataContainer, setmainDataContainer] = useState(
-    upperLevelDataContainer
-  );
+  const [mainDataContainer, setmainDataContainer] = useState({
+    firstName: upperLevelDataContainer.firstName,
+    lastName: upperLevelDataContainer.lastName,
+    email: upperLevelDataContainer.email,
+    country: upperLevelDataContainer.country,
+    subjectTaught: upperLevelDataContainer.subjectTaught,
+    teachingExperience: upperLevelDataContainer.teachingExperience,
+    currentSituation: upperLevelDataContainer.currentSituation,
+    ageConfirmtionError: false,
+  });
   const [mainValidationError, setmainValidationError] = useState({
     firstName: "",
     lastName: "",

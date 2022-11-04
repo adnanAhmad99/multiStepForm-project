@@ -30,7 +30,53 @@ export default function MainFormComponent() {
     teachingExperience: "",
     currentSituation: "",
     ageConfirmtionError: false,
+    profileImage: "",
+    profileHeadline: "",
+    profileDescription: "",
+    profileExperienceDescription: "",
+    motivationDescripition: "",
+    certificateInitialData: {
+      subjectName: "",
+      subjectNameError: "",
+      certificateName: "",
+      certificateNameError: "",
+      certificateDescription: "",
+      certificateDescriptionError: "",
+      certificateIssuer: "",
+      certificateIssuerError: "",
+      startStudyYear: "",
+      endStudyYear: "",
+      studyYearError: "",
+      certificateImageData: {},
+      certificateimageError: false,
+      generalErrors: "",
+      certificateImage: "",
+    },
+    teachingCertificateStatus: false,
+    teachingCertificateDataArray: [
+      {
+        subjectName: "",
+        subjectNameError: "",
+        certificateName: "",
+        certificateNameError: "",
+        certificateDescription: "",
+        certificateDescriptionError: "",
+        certificateIssuer: "",
+        certificateIssuerError: "",
+        startStudyYear: "",
+        endStudyYear: "",
+        studyYearError: "",
+        certificateImageData: {},
+        certificateimageError: false,
+        generalErrors: "",
+        certificateImage: "",
+      },
+    ],
   });
+
+  useEffect(() => {
+    console.log("upperLevelDataContainer", upperLevelDataContainer);
+  }, [upperLevelDataContainer]);
 
   const handleUpperLevelComponentData = (
     progressLevel,

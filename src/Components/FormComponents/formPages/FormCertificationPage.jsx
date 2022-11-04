@@ -1,27 +1,21 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 
-export default function FormCertificationPage() {
-  const initialData = {
-    subjectName: "",
-    subjectNameError: "",
-    certificateName: "",
-    certificateNameError: "",
-    certificateDescription: "",
-    certificateDescriptionError: "",
-    certificateIssuer: "",
-    certificateIssuerError: "",
-    startStudyYear: "",
-    endStudyYear: "",
-    studyYearError: "",
-    certificateImageData: {},
-    certificateimageError: false,
-    generalErrors: "",
-  };
-  const [teachingCertificatesArray, setteachingCertificatesArray] = useState([
-    initialData,
-  ]);
-  const [teachingCertificateStatus, setTeachingCertificateStatus] =
-    useState(false);
+export default function FormCertificationPage({
+  upperLevelDataContainer,
+  handleUpperLevelComponentData,
+}) {
+  const [teachingCertificatesArray, setteachingCertificatesArray] = useState(
+    upperLevelDataContainer.teachingCertificateDataArray
+  );
+
+  // useEffect(() => {
+  //   console.log("teachingCertificatesArray", teachingCertificatesArray);
+  // }, [teachingCertificatesArray]);
+
+  const [teachingCertificateStatus, setTeachingCertificateStatus] = useState(
+    upperLevelDataContainer.teachingCertificateStatus
+  );
 
   const [formUploadingStatus, setformUploadingStatus] = useState("");
 
@@ -39,6 +33,7 @@ export default function FormCertificationPage() {
 
   const handleImageFileUploadData = (indexposition, imageData) => {
     console.log(imageData);
+    console.log(indexposition);
     const newDataArray = [...teachingCertificatesArray];
     const newDataEntered = {
       ...newDataArray[indexposition],
@@ -133,18 +128,26 @@ export default function FormCertificationPage() {
           })
           .then((data) => {
             console.log(data);
+            const newData = JSON.parse(data);
+            if (newData.message == "data received no teaching certificate") {
+              console.log("running");
+              handleUpperLevelComponentData("Education", {
+                teachingCertificateStatus: true,
+              });
+            }
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
+        let passStatus = true;
         for (let [
           indexPosition,
           dataToSend,
         ] of teachingCertificatesArray.entries()) {
           const fd = new FormData();
 
-          const certificateImageData = dataToSend.certificateImageData;
+          const certificateImageData = dataToSend.certificateImageData || {};
 
           delete dataToSend.certificateImageData;
 
@@ -164,6 +167,8 @@ export default function FormCertificationPage() {
           // console.log(typeof certificateImageData);
           // console.log(certificateImageData);
 
+          // console.log(certificateImageData);
+
           if (certificateImageData.name) {
             console.log("sending certificate");
             fd.append(
@@ -181,6 +186,7 @@ export default function FormCertificationPage() {
             }
           )
             .then((data) => {
+              console.log(data);
               if (data.ok) {
                 return data.json();
               }
@@ -193,6 +199,7 @@ export default function FormCertificationPage() {
                 newData.message == "validation error" ||
                 newData.message == "general error"
               ) {
+                passStatus = false;
                 const newDataArray = [...teachingCertificatesArray];
                 const newDataErrorObject = {
                   ...newData.validationData,
@@ -201,9 +208,30 @@ export default function FormCertificationPage() {
                 newDataArray[newData.elementIndexPosition] = newDataErrorObject;
                 setteachingCertificatesArray(newDataArray);
               }
+              if (newData.message == "data received") {
+                const newDataArray = [...teachingCertificatesArray];
+                const newDataErrorObject = {
+                  ...newDataArray[newData.elementIndexPosition],
+                  certificateImage: newData.certificateImage,
+                };
+                newDataArray[newData.elementIndexPosition] = newDataErrorObject;
+                console.log(newDataArray[newData.elementIndexPosition]);
+                setteachingCertificatesArray(newDataArray);
+
+                if (
+                  passStatus &&
+                  indexPosition + 1 == teachingCertificatesArray.length
+                ) {
+                  handleUpperLevelComponentData("Education", {
+                    teachingCertificateDataArray: newDataArray,
+                    teachingCertificateStatus: false,
+                  });
+                }
+              }
             })
             .catch((err) => {
               console.log(err);
+              passStatus = false;
             });
         }
       }
@@ -221,7 +249,7 @@ export default function FormCertificationPage() {
       <div>
         {teachingCertificatesArray.map((data, index) => (
           <TeachingCertificateDivs
-            key={`certificateIndexKey${index}`}
+            key={`certificateIndexKeys${index}`}
             parentData={data}
             handleParentData={handleNewDataChanges}
             handleImageParentData={handleImageFileUploadData}
@@ -236,7 +264,7 @@ export default function FormCertificationPage() {
           onClick={() =>
             setteachingCertificatesArray((prevState) => [
               ...prevState,
-              initialData,
+              upperLevelDataContainer.certificateInitialData,
             ])
           }
         >
@@ -286,6 +314,7 @@ function TeachingCertificateDivs({
   handleCertificateImageError,
   parentIndex,
 }) {
+  console.log(parentIndex);
   // setting for study year end
   const dateArray = ["2000", "2001", "2002", "2003"];
   const [studyYearEndArray, setstudyYearEndArray] = useState(dateArray);
@@ -300,7 +329,9 @@ function TeachingCertificateDivs({
   };
 
   // handling image data
-  const [imageData, setimageData] = useState("");
+  const [imageData, setimageData] = useState(
+    `http://localhost:3030${parentData.certificateImage}`
+  );
 
   const handleCertificateImageData = (e) => {
     const { files } = e.target;
@@ -330,6 +361,7 @@ function TeachingCertificateDivs({
     setimageData(imageUrl);
 
     // console.log(currentImage);
+    console.log(parentIndex);
     handleImageParentData(parentIndex, currentImage);
   };
 
@@ -422,6 +454,7 @@ function TeachingCertificateDivs({
               onChange={(e) => handleParentData(e, parentIndex)}
               disabled={parentData.startStudyYear ? false : true}
             >
+              <option value=""></option>
               {studyYearEndArray.map((element, index) => (
                 <option key={`yearEndArrayIndex${index}`} value={element}>
                   {element}
@@ -449,13 +482,13 @@ function TeachingCertificateDivs({
               <div>
                 <label
                   style={{ border: "1px solid black ", cursor: "pointer" }}
-                  htmlFor="randomId:fityu419278"
+                  htmlFor={`randomId:fityu419278pindex${parentIndex}`}
                 >
                   Upload
                 </label>
                 <input
                   type="file"
-                  id="randomId:fityu419278"
+                  id={`randomId:fityu419278pindex${parentIndex}`}
                   className="noDisplay"
                   onChange={handleCertificateImageData}
                   accept=".png,.jpg"
