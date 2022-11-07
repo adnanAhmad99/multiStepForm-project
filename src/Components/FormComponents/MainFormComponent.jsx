@@ -5,6 +5,7 @@ import FormCertificationPage from "./formPages/FormCertificationPage";
 import FormDescriptionPage from "./formPages/FormDescriptionPage";
 import FormEducationPage from "./formPages/FormEducationPage";
 import FormPhotoPage from "./formPages/FormPhotoPage";
+import FormSubmitedPage from "./formPages/FormSubmitedPage";
 import FormVideoPage from "./formPages/FormVideoPAge";
 import "./formStyle.css";
 import UpperProgressCounter from "./UpperProgressCounter";
@@ -70,6 +71,44 @@ export default function MainFormComponent() {
         certificateimageError: false,
         generalErrors: "",
         certificateImage: "",
+      },
+    ],
+    timezone: "",
+    avalibilityTimings: [
+      {
+        dayName: "Monday",
+        activeDay: true,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Tuesday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Wednesday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Thursday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Friday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Saturday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+      },
+      {
+        dayName: "Sunday",
+        activeDay: false,
+        timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
       },
     ],
   });
@@ -150,6 +189,7 @@ export default function MainFormComponent() {
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
+        {mainProgressController == "Submitted" ? <FormSubmitedPage /> : null}
       </div>
     </article>
   );

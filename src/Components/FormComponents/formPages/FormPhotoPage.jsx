@@ -94,63 +94,75 @@ export default function FormPhotoPage({
         <div className="photoArea">
           <h3>Make a great first Impression</h3>
           <p>Tutors who look friendly and professional get the most students</p>
-          <div className="imageUploaderDiv">
-            <input
-              type="file"
-              accept=".png,.jpeg,.jpg"
-              id="randomId:de2589023"
-              onChange={handleNewImage}
-            />
-            <label htmlFor="randomId:de2589023">Upload photo</label>
+          {!selectedImage || image == "" ? (
+            <div className="imageUploaderDiv">
+              <input
+                type="file"
+                className="noDisplay"
+                accept=".png,.jpeg,.jpg"
+                id="randomId:de2589023"
+                onChange={handleNewImage}
+              />
+              <label htmlFor="randomId:de2589023">Upload photo</label>
 
-            <div className={selectedImageError ? "validationError" : null}>
-              <p>JPG or PNG format</p>
-              <p>Maximum 5 mb</p>
-            </div>
-          </div>
-          <div className="mainDropdownZoneAndImageDislayer">
-            <Dropzone
-              onDrop={handleOnDrop}
-              multiple={false}
-              accept={{
-                "image/png": [".png"],
-                "image/jpg": [".jpg", ".jpeg"],
-              }}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <section>
-                  <div
-                    className="dragndropdiv"
-                    {...getRootProps()}
-                    ref={currentInput}
-                  >
-                    <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
-                  </div>
-                </section>
-              )}
-            </Dropzone>
-            <div className="imageEditorDiv">
-              <div className="ImageShowerDiv">
-                <img src={selectedImage} alt="" />
+              <div className={selectedImageError ? "validationError" : null}>
+                <p>JPG or PNG format</p>
+                <p>Maximum 5 mb</p>
               </div>
-              <button
-                onClick={() => {
-                  setselectedImage("");
-                  setimage("");
-                  setselectedImageError(false);
+            </div>
+          ) : null}
+          <div className="mainDropdownZoneAndImageDislayer">
+            {!selectedImage || image == "" ? (
+              <Dropzone
+                onDrop={handleOnDrop}
+                multiple={false}
+                accept={{
+                  "image/png": [".png"],
+                  "image/jpg": [".jpg", ".jpeg"],
                 }}
               >
-                remove
-              </button>
-            </div>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div
+                      className="dragndropdiv"
+                      {...getRootProps()}
+                      ref={currentInput}
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop some files here, or click to select files
+                      </p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            ) : null}
+            {image != "" ? (
+              <div className="imageEditorDiv">
+                <div className="ImageShowerDiv">
+                  <img src={selectedImage} alt="" />
+                </div>
+                <button
+                  onClick={() => {
+                    setselectedImage("");
+                    setimage("");
+                    setselectedImageError(false);
+                  }}
+                >
+                  remove
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
         <PhotoTipsComponent />
       </div>
-      <button onClick={handleImageSending}>Next</button>
+      <div>
+        <button onClick={() => handleUpperLevelComponentData("About", {})}>
+          Back
+        </button>
+        <button onClick={handleImageSending}>Next</button>
+      </div>
     </article>
   );
 }

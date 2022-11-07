@@ -199,7 +199,9 @@ export default function FormDescriptionPage({
         </p>
       </div>
       <div>
-        <button>Back</button>
+        <button onClick={() => handleUpperLevelComponentData("Education")}>
+          Back
+        </button>
         <button onClick={handleDataSending}>Next</button>
       </div>
     </article>

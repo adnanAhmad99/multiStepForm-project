@@ -1,6 +1,106 @@
 import React from "react";
+import { useState } from "react";
 
-export default function FormAvailabilityPage() {
+export default function FormAvailabilityPage({
+  upperLevelDataContainer,
+  handleUpperLevelComponentData,
+}) {
+  // console.log(upperLevelDataContainer.avalibilityTimings);
+
+  const [timezone, settimezone] = useState(upperLevelDataContainer.timezone);
+  const [timezoneError, settimezoneError] = useState(false);
+  const [avalibilityTimings, setavalibilityTimings] = useState(
+    upperLevelDataContainer.avalibilityTimings
+  );
+
+  // functions
+
+  const handleMiniTimeAddition = (parentIndex) => {
+    // console.log(avalibilityTimings[parentIndex]);
+    const newData = [...avalibilityTimings];
+    newData[parentIndex].timings = [
+      ...newData[parentIndex].timings,
+      { timeStart: "09:00", timeEnd: "18:00" },
+    ];
+    // console.log(newData[parentIndex].timings);
+
+    // console.log(newData);
+    setavalibilityTimings(newData);
+  };
+
+  const handleMiniTimeDeletion = (parentIndex, childernIndex) => {
+    // console.log(parentIndex, childernIndex);
+    const newData = [...avalibilityTimings];
+    newData[parentIndex]["timings"] = newData[parentIndex]["timings"].filter(
+      (element, elementIndex) => elementIndex != childernIndex
+    );
+    // console.log(newData[parentIndex]["timings"]);
+    setavalibilityTimings(newData);
+  };
+
+  const handleMiniTimeChange = (
+    timingValue,
+    value,
+    parentIndex,
+    childernIndex
+  ) => {
+    // console.log(timingValue, value, parentIndex, childernIndex);
+    const newData = [...avalibilityTimings];
+
+    newData[parentIndex]["timings"][childernIndex][timingValue] = value;
+
+    setavalibilityTimings(newData);
+  };
+
+  const handleDayAvalibility = (value, parentIndex) => {
+    // console.log(value, parentIndex);
+    // console.log(typeof value);
+    const newData = [...avalibilityTimings];
+
+    newData[parentIndex].activeDay = value;
+
+    setavalibilityTimings(newData);
+  };
+
+  const handleDataSending = () => {
+    if (!timezone) {
+      settimezoneError(true);
+      return;
+    }
+    settimezoneError(false);
+
+    const fd = new FormData();
+    fd.append("timezone", timezone);
+    fd.append("avalibilityTiming", JSON.stringify(avalibilityTimings));
+
+    fetch("http://localhost:3030/api/formInformation/avalibility", {
+      method: "POST",
+      body: fd,
+    })
+      .then((data) => {
+        console.log(data);
+        if (data.ok) {
+          return data.json();
+        }
+        throw new Error("unable to receive data");
+      })
+      .then((data) => {
+        const newData = JSON.parse(data);
+        if (newData.message == "timezone not selected") {
+          settimezoneError(true);
+        }
+        if (newData.message == "data received") {
+          handleUpperLevelComponentData("Video", {
+            timezone,
+            avalibilityTimings,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <article>
       <h2>Availibilty</h2>
@@ -10,7 +110,8 @@ export default function FormAvailabilityPage() {
         students
       </p>
       <h4>Choose your timezone</h4>
-      <select name="timezone_offset" id="timezone-offset">
+      <select value={timezone} onChange={(e) => settimezone(e.target.value)}>
+        <option value=""></option>
         <option value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</option>
         <option value="-11:00">(GMT -11:00) Midway Island, Samoa</option>
         <option value="-10:00">(GMT -10:00) Hawaii</option>
@@ -86,24 +187,204 @@ export default function FormAvailabilityPage() {
         <option value="+13:00">(GMT +13:00) Apia, Nukualofa</option>
         <option value="+14:00">(GMT +14:00) Line Islands, Tokelau</option>
       </select>
+      {timezoneError && (
+        <p className="validationError">This filed is required</p>
+      )}
       <h3>Set your Avalibility</h3>
       <div className="avalibilityTimmingsDiv">
         {/* make it list */}
-        <div className="inidividualTimingList">
-          <div className="timingCheckBoxDiv">monday</div>
-          <div>
-            <input type="text" placeholder="10:00" />
-            <span></span>
-            <input type="text" placeholder="12:00" />
-          </div>
-        </div>
+        {avalibilityTimings.map((element, index) => (
+          <DaysAvalibilityDiv
+            key={`daysIndex${index}`}
+            parentIndex={index}
+            daysData={element}
+            handleMiniTimeAddition={handleMiniTimeAddition}
+            handleMiniTimeDeletion={handleMiniTimeDeletion}
+            handleMiniTimeChange={handleMiniTimeChange}
+            handleDayAvalibility={handleDayAvalibility}
+          />
+        ))}
         {/* make it list */}
       </div>
 
       <div>
-        <button>Back</button>
-        <button>Next</button>
+        <button onClick={() => handleUpperLevelComponentData("Video", {})}>
+          Back
+        </button>
+        <button onClick={handleDataSending}>Fininsh</button>
       </div>
     </article>
+  );
+}
+
+function DaysAvalibilityDiv({
+  daysData,
+  parentIndex,
+  handleMiniTimeAddition,
+  handleMiniTimeDeletion,
+  handleMiniTimeChange,
+  handleDayAvalibility,
+}) {
+  // console.log(parentIndex);
+  // console.log(daysData);
+
+  return (
+    <div className="inidividualTimingList">
+      <div className="timingCheckBoxDiv">
+        <span
+          onClick={() => handleDayAvalibility(!daysData.activeDay, parentIndex)}
+        >
+          checkbox{" "}
+        </span>
+        <span>{daysData.dayName}</span>
+      </div>
+      <div>
+        {daysData.activeDay &&
+          daysData.timings.map((element, childernIndex) => (
+            <div
+              key={`${parentIndex}childernIndex${childernIndex}${
+                parentIndex + childernIndex + Math.random()
+              }`}
+              className="individualTimingDaystime"
+            >
+              <select
+                onChange={(e) =>
+                  handleMiniTimeChange(
+                    "timeStart",
+                    e.target.value,
+                    parentIndex,
+                    childernIndex
+                  )
+                }
+                value={element.timeStart}
+              >
+                <option value="00:00">00:00</option>
+                <option value="00:30">00:30</option>
+                <option value="01:00">01:00</option>
+                <option value="01:30">01:30</option>
+                <option value="02:00">02:00</option>
+                <option value="02:30">02:30</option>
+                <option value="03:00">03:00</option>
+                <option value="03:30">03:30</option>
+                <option value="04:00">04:00</option>
+                <option value="04:30">04:30</option>
+                <option value="05:00">05:00</option>
+                <option value="05:30">05:30</option>
+                <option value="06:00">06:00</option>
+                <option value="06:30">06:30</option>
+                <option value="07:00">07:00</option>
+                <option value="07:30">07:30</option>
+                <option value="08:00">08:00</option>
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="09:30">09:30</option>
+                <option value="10:00">10:00</option>
+                <option value="10:30">10:30</option>
+                <option value="11:00">11:00</option>
+                <option value="11:30">11:30</option>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17:00">17:00</option>
+                <option value="17:30">17:30</option>
+                <option value="18:00">18:00</option>
+                <option value="18:30">18:30</option>
+                <option value="19:00">19:00</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+                <option value="21:30">21:30</option>
+                <option value="22:00">22:00</option>
+                <option value="22:30">22:30</option>
+                <option value="23:00">23:00</option>
+                <option value="23:30">23:30</option>
+                <option value="24:00">24:00</option>
+                <option value="24:30">24:30</option>
+              </select>
+              <span>to</span>
+              <select
+                onChange={(e) =>
+                  handleMiniTimeChange(
+                    "timeEnd",
+                    e.target.value,
+                    parentIndex,
+                    childernIndex
+                  )
+                }
+                value={element.timeEnd}
+              >
+                <option value="00:00">00:00</option>
+                <option value="00:30">00:30</option>
+                <option value="01:00">01:00</option>
+                <option value="01:30">01:30</option>
+                <option value="02:00">02:00</option>
+                <option value="02:30">02:30</option>
+                <option value="03:00">03:00</option>
+                <option value="03:30">03:30</option>
+                <option value="04:00">04:00</option>
+                <option value="04:30">04:30</option>
+                <option value="05:00">05:00</option>
+                <option value="05:30">05:30</option>
+                <option value="06:00">06:00</option>
+                <option value="06:30">06:30</option>
+                <option value="07:00">07:00</option>
+                <option value="07:30">07:30</option>
+                <option value="08:00">08:00</option>
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="09:30">09:30</option>
+                <option value="10:00">10:00</option>
+                <option value="10:30">10:30</option>
+                <option value="11:00">11:00</option>
+                <option value="11:30">11:30</option>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17:00">17:00</option>
+                <option value="17:30">17:30</option>
+                <option value="18:00">18:00</option>
+                <option value="18:30">18:30</option>
+                <option value="19:00">19:00</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+                <option value="21:30">21:30</option>
+                <option value="22:00">22:00</option>
+                <option value="22:30">22:30</option>
+                <option value="23:00">23:00</option>
+                <option value="23:30">23:30</option>
+                <option value="24:00">24:00</option>
+                <option value="24:30">24:30</option>
+              </select>
+              {childernIndex > 0 ? (
+                <button
+                  onClick={() =>
+                    handleMiniTimeDeletion(parentIndex, childernIndex)
+                  }
+                >
+                  Delete
+                </button>
+              ) : null}
+            </div>
+          ))}
+        <button onClick={() => handleMiniTimeAddition(parentIndex)}>Add</button>
+      </div>
+    </div>
   );
 }

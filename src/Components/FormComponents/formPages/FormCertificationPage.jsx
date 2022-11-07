@@ -299,6 +299,9 @@ export default function FormCertificationPage({
         </span>
       </div>
       <div>
+        <button onClick={() => handleUpperLevelComponentData("Photo")}>
+          Back
+        </button>
         <button onClick={handleDataSending}>next</button>
       </div>
       {formUploadingStatus && <p>{formUploadingStatus}</p>}
