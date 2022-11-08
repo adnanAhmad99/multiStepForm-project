@@ -100,21 +100,23 @@ export default function FormDescriptionPage({
   };
 
   return (
-    <article>
+    <article className="descriptonFormPageArticle">
       <h2>Profile Description</h2>
       <p>Create a profile headline and description</p>
       <h3>Description for English-speaking students</h3>
-      <div>
+      <div className="descriptionPageProfileInfoDiv">
         <div className="profileImageDiv">
           <img
-            src={`http://localhost:3030${upperLevelDataContainer.profileImage}`}
+            // src={`http://localhost:3030${upperLevelDataContainer.profileImage}`}
+            src={`http://localhost:3030/profilePictures/profile-1667396730143-2img.jpg`}
             alt=""
           />
         </div>
-        <div>
+        <div className="profileInfo">
           <h4>
-            {upperLevelDataContainer.firstName}{" "}
-            {upperLevelDataContainer.lastName}
+            {/* {upperLevelDataContainer.firstName}{" "}
+            {upperLevelDataContainer.lastName} */}
+            adsfd asdfadf
           </h4>
           <input
             type="text"
@@ -132,9 +134,9 @@ export default function FormDescriptionPage({
         </div>
       </div>
 
-      <div className="flexDiv">
+      <div className="flexDiv descriptionDivs">
         <label htmlFor="randomId:4892787hae">
-          Introduce yourself and share briefly about your interests
+          Introduce yourself and share briefly about your interests:
         </label>
         <textarea
           name="profileDescription"
@@ -151,9 +153,9 @@ export default function FormDescriptionPage({
           </p>
         )}
       </div>
-      <div className="flexDiv">
+      <div className="flexDiv descriptionDivs">
         <label htmlFor="randomID:ts3623st5">
-          Describe your teaching ,experience , cerification and methodology
+          Describe your teaching ,experience , cerification and methodology:
         </label>
         <textarea
           name="profileExperienceDescription"
@@ -170,9 +172,9 @@ export default function FormDescriptionPage({
           </p>
         )}
       </div>
-      <div className="flexDiv">
+      <div className="flexDiv descriptionDivs">
         <label htmlFor="randomID:ts36238275">
-          Motivate students to book a trail lesson with you
+          Motivate students to book a trail lesson with you:
         </label>
         <textarea
           name="motivationDescripition"
@@ -189,7 +191,7 @@ export default function FormDescriptionPage({
           </p>
         )}
       </div>
-      <div>
+      <div className="counterMainDiv">
         <p className={validationError.couterError ? "validationError" : null}>
           Minimum 400 characters
         </p>
@@ -198,7 +200,7 @@ export default function FormDescriptionPage({
           <span className="makeBold">{characterCounter}</span>
         </p>
       </div>
-      <div>
+      <div className="navigationButtonDiv">
         <button onClick={() => handleUpperLevelComponentData("Education")}>
           Back
         </button>

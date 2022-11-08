@@ -164,8 +164,8 @@
   cursor: pointer;
 }
 
-.ageConfirmationSvgSpan {
-  display: inline-block;
+.ageConfirmationSvgSpan,
+.checkboxConfirmationSvgSpan {
   min-width: 18px;
   height: 18px;
   border: 1px solid rgba(0, 0, 0, 0.476);
@@ -173,8 +173,10 @@
   justify-content: center;
   align-items: center;
   margin-right: 0.5rem;
+  cursor: pointer;
 }
-.acitveAgeCheckbox {
+.acitveAgeCheckbox,
+.acitveCheckbox {
   background-color: rgb(59, 179, 189);
   border: none;
 }
@@ -188,6 +190,9 @@
   color: #fff;
   border: none;
 }
+.navigationClass {
+  margin-top: 0.5rem;
+}
 
 /* styling for form photo page */
 
@@ -197,11 +202,21 @@
   padding: 1rem;
 }
 
-.formPhotoPage > div {
+.formPhotoAndTipsPage {
   display: grid;
   grid-template-columns: 1.3fr 0.8fr;
   grid-template-rows: 1fr;
   gap: 0.6rem;
+}
+@media screen and (max-width: 750px) {
+  .formPhotoAndTipsPage {
+    display: block;
+  }
+}
+@media screen and (max-width: 600px) {
+  .classDropzone {
+    display: none;
+  }
 }
 .photoTips {
   /* width: 250px; */
@@ -242,6 +257,184 @@
   /* width: 100%; */
   /* height: 100%; */
 }
+
+/* form certificate page */
+.formCertificationPage,
+.formCertificationPage {
+  max-width: 800px;
+  padding: 1rem;
+  background-color: #fff;
+}
+.formCertificationDiv,
+.formEducationDiv {
+  max-width: 500px;
+}
+
+.certificatePageDeleteButton,
+.educationPageDeleteButon {
+  border: none;
+  color: rgba(255, 255, 255, 0);
+  cursor: pointer;
+}
+.certificatePageDeleteButton > svg,
+.educationPageDeleteButon > svg {
+  fill: rgb(59, 179, 189);
+}
+
+.selectDivEducationPage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.dashAdderSpan {
+  margin: 0rem 0.5rem;
+  background-color: black;
+  width: 21px;
+  height: 3px;
+  display: inline-block;
+}
+
+.certificateUploadDiv > div {
+  margin: 0.5rem 0rem;
+}
+
+/* general styles */
 input[type="range"] {
   width: 100%;
+}
+
+.navigationButtonDiv {
+  display: flex;
+  padding: 0.5rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.navigationButtonDiv > button {
+  padding: 0.5rem 1rem;
+  background-color: rgb(59, 179, 189);
+  border: none;
+  font-size: 1.1rem;
+  color: #fff;
+  cursor: pointer;
+}
+.fileUploadLabel {
+  border: 1px solid rgb(59, 179, 189);
+  padding: 0.5rem 1rem;
+  color: rgb(59, 179, 189);
+  cursor: pointer;
+  display: inline-block;
+}
+.individualImageDiv {
+  /* position: relative; */
+  display: inline-block;
+  width: 300px;
+  height: 250px;
+  border: 1px solid black;
+  object-fit: cover;
+}
+.individualImageDiv > img {
+  height: 100%;
+  width: 100%;
+}
+
+/* .individualImageDiv:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.individualImageDiv > button {
+  display: none;
+  position: absolute;
+  top: 50%;
+  color: #fff;
+  left: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+  padding: 1rem;
+  border-radius: 50%;
+  z-index: 10;
+}
+.individualImageDiv:hover > button {
+  display: inline;
+} */
+
+/* form description page */
+.descriptonFormPageArticle {
+  max-width: 600px;
+  background-color: #fff;
+  padding: 1rem;
+}
+.descriptionPageProfileInfoDiv {
+  margin: 0.5rem 0rem;
+  display: flex;
+  /* align-items: center; */
+}
+@media screen and (max-width: 650px) {
+  .descriptionPageProfileInfoDiv {
+    flex-wrap: wrap;
+  }
+}
+.profileImageDiv {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border: 1px solid black;
+}
+.profileImageDiv > img {
+  width: 100%;
+  height: 100%;
+}
+.profileInfo {
+  padding: 1rem;
+}
+.profileInfo > * {
+  margin: 0.5rem;
+}
+.profileInfo > input {
+  width: 80%;
+}
+.descriptionDivs > textarea {
+  resize: none;
+  padding: 1rem;
+}
+.counterMainDiv {
+  margin: 0.5rem;
+}
+
+/* avalibility page  */
+.avalibilityFormPageArticle {
+  max-width: 550px;
+  padding: 1rem;
+  background-color: #fff;
+}
+.avalibilityFormPageArticle > * {
+  margin: 0.5rem 0rem;
+}
+.avalibilityPageSelectController {
+  width: 100%;
+}
+.timingCheckBoxDiv {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0rem;
+}
+
+.individualTimingDaystime {
+  margin: 0.3rem 0rem;
+}
+.individualTimingDaystime > * {
+  margin: 0rem 0.5rem;
+}
+.timingsDeleteButton {
+  border: none;
+  color: rgba(255, 255, 255, 0);
+  cursor: pointer;
+}
+.timingsDeleteButton {
+  fill: rgb(59, 179, 189);
 }

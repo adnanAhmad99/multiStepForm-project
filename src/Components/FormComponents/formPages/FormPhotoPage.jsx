@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useEffect } from "react";
 import Dropzone from "react-dropzone";
 // import Cropper from "react-easy-crop";
 
@@ -10,6 +11,10 @@ export default function FormPhotoPage({
   const [image, setimage] = useState(upperLevelDataContainer.profileImage);
   const [selectedImageError, setselectedImageError] = useState(false);
   const currentInput = useRef("");
+
+  useEffect(() => {
+    console.log(selectedImageError);
+  }, [selectedImageError]);
 
   const handleImageSending = () => {
     if (image) {
@@ -38,6 +43,8 @@ export default function FormPhotoPage({
         .catch((err) => {
           console.log(err.message);
         });
+    } else {
+      setselectedImageError(true);
     }
   };
 
@@ -90,7 +97,7 @@ export default function FormPhotoPage({
   return (
     <article className="formPhotoPage">
       <h2>Photo</h2>
-      <div>
+      <div className="formPhotoAndTipsPage">
         <div className="photoArea">
           <h3>Make a great first Impression</h3>
           <p>Tutors who look friendly and professional get the most students</p>
@@ -122,7 +129,7 @@ export default function FormPhotoPage({
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
-                  <section>
+                  <section className="classDropzone">
                     <div
                       className="dragndropdiv"
                       {...getRootProps()}
@@ -157,7 +164,7 @@ export default function FormPhotoPage({
         </div>
         <PhotoTipsComponent />
       </div>
-      <div>
+      <div className="navigationButtonDiv">
         <button onClick={() => handleUpperLevelComponentData("About", {})}>
           Back
         </button>

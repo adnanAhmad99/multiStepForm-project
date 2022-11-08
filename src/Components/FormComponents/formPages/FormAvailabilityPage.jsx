@@ -102,7 +102,7 @@ export default function FormAvailabilityPage({
   };
 
   return (
-    <article>
+    <article className="avalibilityFormPageArticle">
       <h2>Availibilty</h2>
       <h3>Set your timezone </h3>
       <p>
@@ -110,7 +110,11 @@ export default function FormAvailabilityPage({
         students
       </p>
       <h4>Choose your timezone</h4>
-      <select value={timezone} onChange={(e) => settimezone(e.target.value)}>
+      <select
+        className="avalibilityPageSelectController"
+        value={timezone}
+        onChange={(e) => settimezone(e.target.value)}
+      >
         <option value=""></option>
         <option value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</option>
         <option value="-11:00">(GMT -11:00) Midway Island, Samoa</option>
@@ -207,7 +211,7 @@ export default function FormAvailabilityPage({
         {/* make it list */}
       </div>
 
-      <div>
+      <div className="navigationButtonDiv">
         <button onClick={() => handleUpperLevelComponentData("Video", {})}>
           Back
         </button>
@@ -232,9 +236,20 @@ function DaysAvalibilityDiv({
     <div className="inidividualTimingList">
       <div className="timingCheckBoxDiv">
         <span
+          className={`checkboxConfirmationSvgSpan ${
+            daysData.activeDay ? "acitveCheckbox" : ""
+          }`}
           onClick={() => handleDayAvalibility(!daysData.activeDay, parentIndex)}
         >
-          checkbox{" "}
+          <svg
+            height="9"
+            viewBox="0 0 11 9"
+            width="11"
+            className="ageConfirmationSvg"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M4 5.586L9.293.293l1.414 1.414L4 8.414.293 4.707l1.414-1.414z"></path>
+          </svg>
         </span>
         <span>{daysData.dayName}</span>
       </div>
@@ -374,16 +389,31 @@ function DaysAvalibilityDiv({
               </select>
               {childernIndex > 0 ? (
                 <button
+                  className="timingsDeleteButton"
                   onClick={() =>
                     handleMiniTimeDeletion(parentIndex, childernIndex)
                   }
                 >
-                  Delete
+                  <svg
+                    height="15"
+                    viewBox="0 0 12 15"
+                    width="12"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M4 15a3 3 0 0 1-3-3V5h10v7a3 3 0 0 1-3 3zM3 7v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V7zm9-6v2H0V1h3l.707-.707A1 1 0 0 1 4.414 0h3.172a1 1 0 0 1 .707.293L9 1z"></path>
+                  </svg>
                 </button>
               ) : null}
             </div>
           ))}
-        <button onClick={() => handleMiniTimeAddition(parentIndex)}>Add</button>
+        {daysData.activeDay && (
+          <button
+            className="additionButton"
+            onClick={() => handleMiniTimeAddition(parentIndex)}
+          >
+            Add another time field
+          </button>
+        )}
       </div>
     </div>
   );

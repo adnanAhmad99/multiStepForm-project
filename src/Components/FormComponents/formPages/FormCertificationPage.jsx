@@ -241,70 +241,73 @@ export default function FormCertificationPage({
 
   return (
     <article className="formCertificationPage">
-      <h2>Teaching certification</h2>
-      <p>
-        Do you have teaching certificate? if so, describe them so enhance your
-        profile credibility and get more students
-      </p>
-      <div>
-        {teachingCertificatesArray.map((data, index) => (
-          <TeachingCertificateDivs
-            key={`certificateIndexKeys${index}`}
-            parentData={data}
-            handleParentData={handleNewDataChanges}
-            handleImageParentData={handleImageFileUploadData}
-            parentIndex={index}
-            handleCertificationDeleltion={handleCertificationDeleltion}
-            handleCertificateImageError={handleCertificateImageError}
-          />
-        ))}
-      </div>
-      <div>
-        <button
-          onClick={() =>
-            setteachingCertificatesArray((prevState) => [
-              ...prevState,
-              upperLevelDataContainer.certificateInitialData,
-            ])
-          }
-        >
-          Add another certificate
-        </button>
-      </div>
-      <div className="flexDivRow">
-        <span
-          className={`ageConfirmationSvgSpan ${
-            teachingCertificateStatus ? "acitveAgeCheckbox" : ""
-          }`}
-          onClick={() =>
-            setTeachingCertificateStatus(!teachingCertificateStatus)
-          }
-        >
-          <svg
-            height="9"
-            viewBox="0 0 11 9"
-            width="11"
-            className="ageConfirmationSvg"
-            xmlns="http://www.w3.org/2000/svg"
+      <div className="formCertificationDiv">
+        <h2>Teaching certification</h2>
+        <p>
+          Do you have teaching certificate? if so, describe them so enhance your
+          profile credibility and get more students
+        </p>
+        <div>
+          {teachingCertificatesArray.map((data, index) => (
+            <TeachingCertificateDivs
+              key={`certificateIndexKeys${index}`}
+              parentData={data}
+              handleParentData={handleNewDataChanges}
+              handleImageParentData={handleImageFileUploadData}
+              parentIndex={index}
+              handleCertificationDeleltion={handleCertificationDeleltion}
+              handleCertificateImageError={handleCertificateImageError}
+            />
+          ))}
+        </div>
+        <div>
+          <button
+            className="additionButton"
+            onClick={() =>
+              setteachingCertificatesArray((prevState) => [
+                ...prevState,
+                upperLevelDataContainer.certificateInitialData,
+              ])
+            }
           >
-            <path d="M4 5.586L9.293.293l1.414 1.414L4 8.414.293 4.707l1.414-1.414z"></path>
-          </svg>
-        </span>
-        <span
-          onClick={() =>
-            setTeachingCertificateStatus(!teachingCertificateStatus)
-          }
-        >
-          I don't have any teaching certificate yet
-        </span>
+            Add another certificate
+          </button>
+        </div>
+        <div className="flexDivRow">
+          <span
+            className={`ageConfirmationSvgSpan ${
+              teachingCertificateStatus ? "acitveAgeCheckbox" : ""
+            }`}
+            onClick={() =>
+              setTeachingCertificateStatus(!teachingCertificateStatus)
+            }
+          >
+            <svg
+              height="9"
+              viewBox="0 0 11 9"
+              width="11"
+              className="ageConfirmationSvg"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M4 5.586L9.293.293l1.414 1.414L4 8.414.293 4.707l1.414-1.414z"></path>
+            </svg>
+          </span>
+          <span
+            onClick={() =>
+              setTeachingCertificateStatus(!teachingCertificateStatus)
+            }
+          >
+            I don't have any teaching certificate yet
+          </span>
+        </div>
+        <div className="navigationButtonDiv">
+          <button onClick={() => handleUpperLevelComponentData("Photo")}>
+            Back
+          </button>
+          <button onClick={handleDataSending}>next</button>
+        </div>
+        {formUploadingStatus && <p>{formUploadingStatus}</p>}
       </div>
-      <div>
-        <button onClick={() => handleUpperLevelComponentData("Photo")}>
-          Back
-        </button>
-        <button onClick={handleDataSending}>next</button>
-      </div>
-      {formUploadingStatus && <p>{formUploadingStatus}</p>}
     </article>
   );
 }
@@ -317,7 +320,6 @@ function TeachingCertificateDivs({
   handleCertificateImageError,
   parentIndex,
 }) {
-  console.log(parentIndex);
   // setting for study year end
   const dateArray = ["2000", "2001", "2002", "2003"];
   const [studyYearEndArray, setstudyYearEndArray] = useState(dateArray);
@@ -333,7 +335,9 @@ function TeachingCertificateDivs({
 
   // handling image data
   const [imageData, setimageData] = useState(
-    `http://localhost:3030${parentData.certificateImage}`
+    parentData.certificateImage
+      ? `http://localhost:3030${parentData.certificateImage}`
+      : ""
   );
 
   const handleCertificateImageData = (e) => {
@@ -370,12 +374,24 @@ function TeachingCertificateDivs({
 
   return (
     <div className="teachingCertificateIndividualDiv">
-      <button onClick={() => handleCertificationDeleltion(parentIndex)}>
-        Delete
-      </button>
       <div>
         <div className="flexDiv">
-          <label htmlFor="randomId:subjecttaught5293000">Subject</label>
+          <div className="flexDivRowSpaceBetween">
+            <label htmlFor="randomId:subjecttaught5293000">Subject</label>
+            <button
+              className="certificatePageDeleteButton"
+              onClick={() => handleCertificationDeleltion(parentIndex)}
+            >
+              <svg
+                height="15"
+                viewBox="0 0 12 15"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M4 15a3 3 0 0 1-3-3V5h10v7a3 3 0 0 1-3 3zM3 7v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V7zm9-6v2H0V1h3l.707-.707A1 1 0 0 1 4.414 0h3.172a1 1 0 0 1 .707.293L9 1z"></path>
+              </svg>
+            </button>
+          </div>
           <select
             name="subjectName"
             value={parentData.subjectName}
@@ -437,7 +453,7 @@ function TeachingCertificateDivs({
         </div>
         <div className="selectDivEducationPage">
           <label>Years of study</label>
-          <div>
+          <div className="slectSpanDivSeprator">
             <select
               placeholder="Select"
               name="startStudyYear"
@@ -471,7 +487,6 @@ function TeachingCertificateDivs({
         </div>
         <div className="certificateImageAdditionDiv">
           <div className="certificateInfoDiv">
-            <div className="certificateInfoImageSvgDiv">image</div>
             <div>
               <p className="bold">Get a "Certificate Verified" badge</p>
               <p>
@@ -484,7 +499,7 @@ function TeachingCertificateDivs({
             <div>
               <div>
                 <label
-                  style={{ border: "1px solid black ", cursor: "pointer" }}
+                  className="fileUploadLabel"
                   htmlFor={`randomId:fityu419278pindex${parentIndex}`}
                 >
                   Upload
@@ -507,16 +522,21 @@ function TeachingCertificateDivs({
             </div>
             {imageData && (
               <div className="certificateImageDiv">
-                <img src={imageData} alt="image go here" />
-                <button
-                  onClick={() => {
-                    setimageData("");
-                    handleCertificateImageError(parentIndex, false);
-                    handleImageParentData(parentIndex, {});
-                  }}
-                >
-                  clear
-                </button>
+                <div className="individualImageDiv">
+                  <img src={imageData} alt="" />
+                </div>
+                <div>
+                  <button
+                    className="buttonStyling"
+                    onClick={() => {
+                      setimageData("");
+                      handleCertificateImageError(parentIndex, false);
+                      handleImageParentData(parentIndex, {});
+                    }}
+                  >
+                    Clear Image
+                  </button>
+                </div>
               </div>
             )}
           </div>

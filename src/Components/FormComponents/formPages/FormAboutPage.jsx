@@ -834,7 +834,7 @@ export default function FormAboutPage({
             )}
           </div>
         </div>
-        <div>
+        <div className="navigationClass">
           <button type="submit">Next</button>
         </div>
       </form>

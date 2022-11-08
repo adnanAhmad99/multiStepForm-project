@@ -28,6 +28,18 @@ button {
   cursor: pointer;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+span {
+  cursor: default;
+}
+
 .noDisplay {
   display: none;
 }
@@ -46,4 +58,25 @@ button {
 .flexDivRow {
   display: flex;
   align-items: center;
+}
+.flexDivRowSpaceBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.buttonStyling {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: rgb(59, 179, 189);
+  color: #fff;
+  font-size: 1.1rem;
+  border: none;
+}
+.additionButton {
+  color: rgb(59, 179, 189);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgb(59, 179, 189);
+  cursor: pointer;
+  margin: 0.5rem 0rem;
+  background-color: #fff;
 }
