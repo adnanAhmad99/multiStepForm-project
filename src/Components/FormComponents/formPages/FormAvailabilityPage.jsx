@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function FormAvailabilityPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
   // console.log(upperLevelDataContainer.avalibilityTimings);
 
@@ -98,6 +99,7 @@ export default function FormAvailabilityPage({
       })
       .catch((err) => {
         console.log(err);
+        seterrorModel(true);
       });
   };
 

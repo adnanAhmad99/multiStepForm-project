@@ -6,6 +6,7 @@ import Dropzone from "react-dropzone";
 export default function FormPhotoPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
   const [selectedImage, setselectedImage] = useState("");
   const [image, setimage] = useState(upperLevelDataContainer.profileImage);
@@ -42,6 +43,7 @@ export default function FormPhotoPage({
         })
         .catch((err) => {
           console.log(err.message);
+          seterrorModel(true);
         });
     } else {
       setselectedImageError(true);

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 export default function FormCertificationPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
   const [teachingCertificatesArray, setteachingCertificatesArray] = useState(
     upperLevelDataContainer.teachingCertificateDataArray
@@ -138,6 +139,7 @@ export default function FormCertificationPage({
           })
           .catch((err) => {
             console.log(err);
+            seterrorModel(true);
           });
       } else {
         let passStatus = true;
@@ -232,6 +234,7 @@ export default function FormCertificationPage({
             .catch((err) => {
               console.log(err);
               passStatus = false;
+              seterrorModel(true);
             });
         }
       }

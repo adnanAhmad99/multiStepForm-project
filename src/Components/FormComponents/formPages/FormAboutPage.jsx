@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-number-input";
 export default function FormAboutPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
   //states for components
   const [mainDataContainer, setmainDataContainer] = useState({
@@ -209,10 +210,7 @@ export default function FormAboutPage({
       })
       .catch((err) => {
         console.error(err.message);
-        setformStatus("error updating data");
-        setTimeout(() => {
-          setformStatus("");
-        }, 1500);
+        seterrorModel(true);
       });
   };
 

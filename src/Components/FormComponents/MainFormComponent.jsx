@@ -111,7 +111,45 @@ export default function MainFormComponent() {
         timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
       },
     ],
+    educationCertificateInitialData: {
+      universityName: "",
+      universityNameError: "",
+      degreeName: "",
+      degreeNameError: "",
+      degreeType: "",
+      degreeTypeError: "",
+      specialization: "",
+      specializationError: "",
+      startStudyYear: "",
+      endStudyYear: "",
+      studyYearError: "",
+      degreeImageData: {},
+      degreeimageError: false,
+      generalErrors: "",
+      educationCetificateImage:""
+    },
+    educationCertificateStatus: false,
+    educationCertificateArray: [
+      {
+        universityName: "",
+        universityNameError: "",
+        degreeName: "",
+        degreeNameError: "",
+        degreeType: "",
+        degreeTypeError: "",
+        specialization: "",
+        specializationError: "",
+        startStudyYear: "",
+        endStudyYear: "",
+        studyYearError: "",
+        degreeImageData: {},
+        degreeimageError: false,
+        generalErrors: "",
+      educationCetificateImage:""
+      },
+    ],
   });
+  const [errorModel, seterrorModel] = useState(false);
 
   useEffect(() => {
     console.log("upperLevelDataContainer", upperLevelDataContainer);
@@ -129,12 +167,22 @@ export default function MainFormComponent() {
     }));
   };
 
-  // useEffect(() => {
-  //   console.log(upperLevelDataContainer);
-  // }, [upperLevelDataContainer]);
-
   return (
     <article className="mainFormArticle">
+      {errorModel && (
+        <div className="errorModelContainer">
+          <div className="errorModel">
+            <p>Something went wrong </p>
+            <p>please try later...</p>
+            <button
+              className="buttonStyling"
+              onClick={() => seterrorModel(false)}
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      )}
       <div className="mainProgressCountersDivs">
         {pagesArray.map((element, index) => (
           <UpperProgressCounter
@@ -149,42 +197,49 @@ export default function MainFormComponent() {
       <div className="mainFormBody">
         {mainProgressController == "About" ? (
           <FormAboutPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Photo" ? (
           <FormPhotoPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Certification" ? (
           <FormCertificationPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Education" ? (
           <FormEducationPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Description" ? (
           <FormDescriptionPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Video" ? (
           <FormVideoPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />
         ) : null}
         {mainProgressController == "Availability" ? (
           <FormAvailabilityPage
+            seterrorModel={seterrorModel}
             upperLevelDataContainer={upperLevelDataContainer}
             handleUpperLevelComponentData={handleUpperLevelComponentData}
           />

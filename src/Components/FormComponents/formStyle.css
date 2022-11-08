@@ -1,6 +1,32 @@
 .mainFormArticle {
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* style for error model */
+.errorModelContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.599);
+}
+.errorModel {
+  background-color: #fff;
+  padding: 1.5rem;
+  border: 1px solid red;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* style for upper progress bar */

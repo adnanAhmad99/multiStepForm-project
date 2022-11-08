@@ -3,6 +3,7 @@ import React, { useState } from "react";
 export default function FormDescriptionPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
   // states
   const [mainInternalDataObject, setmainInternalDataObject] = useState({
@@ -95,6 +96,7 @@ export default function FormDescriptionPage({
         })
         .catch((err) => {
           console.log(err);
+          seterrorModel(true);
         });
     }
   };

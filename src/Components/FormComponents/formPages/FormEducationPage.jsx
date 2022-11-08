@@ -3,28 +3,14 @@ import React, { useState } from "react";
 export default function FormEducationPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
+  seterrorModel,
 }) {
-  const initialData = {
-    universityName: "",
-    universityNameError: "",
-    degreeName: "",
-    degreeNameError: "",
-    degreeType: "",
-    degreeTypeError: "",
-    specialization: "",
-    specializationError: "",
-    startStudyYear: "",
-    endStudyYear: "",
-    studyYearError: "",
-    degreeImageData: {},
-    degreeimageError: false,
-    generalErrors: "",
-  };
-  const [educationCertificatesArray, seteducationCertificatesArray] = useState([
-    initialData,
-  ]);
-  const [educationCertificateStatus, setEducationCertificateStatus] =
-    useState(false);
+  const [educationCertificatesArray, seteducationCertificatesArray] = useState(
+    upperLevelDataContainer.educationCertificateArray
+  );
+  const [educationCertificateStatus, setEducationCertificateStatus] = useState(
+    upperLevelDataContainer.educationCertificateStatus
+  );
 
   const [formUploadingStatus, setformUploadingStatus] = useState("");
 
@@ -141,6 +127,7 @@ export default function FormEducationPage({
           })
           .catch((err) => {
             console.log(err);
+            seterrorModel(true);
           });
       } else {
         for (let [
@@ -209,6 +196,7 @@ export default function FormEducationPage({
             })
             .catch((err) => {
               console.log(err);
+              seterrorModel(true);
             });
         }
       }
@@ -245,7 +233,7 @@ export default function FormEducationPage({
             onClick={() =>
               seteducationCertificatesArray((prevState) => [
                 ...prevState,
-                initialData,
+                upperLevelDataContainer.educationCertificateInitialData,
               ])
             }
           >
@@ -315,7 +303,11 @@ function EducationCertificateDivs({
   };
 
   // handling image data
-  const [imageData, setimageData] = useState("");
+  const [imageData, setimageData] = useState(
+    parentData.educationCetificateImage
+      ? `http://localhost:3030${parentData.educationCetificateImage}`
+      : null
+  );
 
   const handleCertificateImageData = (e) => {
     const { files } = e.target;
