@@ -126,9 +126,9 @@ export default function MainFormComponent() {
       degreeImageData: {},
       degreeimageError: false,
       generalErrors: "",
-      educationCetificateImage:""
+      educationCetificateImage: "",
     },
-    educationCertificateStatus: false,
+    noEducationCertificateStatus: false,
     educationCertificateArray: [
       {
         universityName: "",
@@ -145,11 +145,11 @@ export default function MainFormComponent() {
         degreeImageData: {},
         degreeimageError: false,
         generalErrors: "",
-      educationCetificateImage:""
+        educationCetificateImage: "",
       },
     ],
   });
-  const [errorModel, seterrorModel] = useState(false);
+  const [errorModel, seterrorModel] = useState(true);
 
   useEffect(() => {
     console.log("upperLevelDataContainer", upperLevelDataContainer);

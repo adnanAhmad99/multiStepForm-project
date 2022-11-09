@@ -61,7 +61,20 @@ export default function FormCertificationPage({
     setteachingCertificatesArray(newDataArray);
   };
 
-  const handleDataSending = () => {
+  const handleYearEndDataUpdation = (startValue, endValue, indexposition) => {
+    const newDataArray = [...teachingCertificatesArray];
+    const newDataEntered = {
+      ...newDataArray[indexposition],
+      ["startStudyYear"]: startValue,
+      ["endStudyYear"]: endValue,
+    };
+
+    newDataArray[indexposition] = newDataEntered;
+
+    setteachingCertificatesArray(newDataArray);
+  };
+
+  const handleDataSending = async () => {
     // checking validations
     const internalErrorArray = [];
     let errorStatus = false;
@@ -164,13 +177,6 @@ export default function FormCertificationPage({
             fd.append("firstCertificate", true);
           }
 
-          // console.log(Object.keys(certificateImageData).length);
-          // console.log(!certificateImageData.name);
-          // console.log(typeof certificateImageData);
-          // console.log(certificateImageData);
-
-          // console.log(certificateImageData);
-
           if (certificateImageData.name) {
             console.log("sending certificate");
             fd.append(
@@ -180,23 +186,22 @@ export default function FormCertificationPage({
             );
           }
 
-          fetch(
-            "http://localhost:3030/api/formInformation/teachingCertificate",
-            {
-              method: "POST",
-              body: fd,
-            }
-          )
-            .then((data) => {
-              console.log(data);
-              if (data.ok) {
-                return data.json();
+          // new method
+          try {
+            const data = await fetch(
+              "http://localhost:3030/api/formInformation/teachingCertificate",
+              {
+                method: "POST",
+                body: fd,
               }
-              throw new Error("unable to receive data");
-            })
-            .then((data) => {
-              console.log(data);
-              const newData = JSON.parse(data);
+            );
+
+            console.log(data);
+            if (data.ok) {
+              const dataReceived = await data.json();
+
+              const newData = JSON.parse(dataReceived);
+              console.log(newData);
               if (
                 newData.message == "validation error" ||
                 newData.message == "general error"
@@ -212,12 +217,11 @@ export default function FormCertificationPage({
               }
               if (newData.message == "data received") {
                 const newDataArray = [...teachingCertificatesArray];
-                const newDataErrorObject = {
+                const newDataObject = {
                   ...newDataArray[newData.elementIndexPosition],
                   certificateImage: newData.certificateImage,
                 };
-                newDataArray[newData.elementIndexPosition] = newDataErrorObject;
-                console.log(newDataArray[newData.elementIndexPosition]);
+                newDataArray[newData.elementIndexPosition] = newDataObject;
                 setteachingCertificatesArray(newDataArray);
 
                 if (
@@ -230,12 +234,72 @@ export default function FormCertificationPage({
                   });
                 }
               }
-            })
-            .catch((err) => {
-              console.log(err);
-              passStatus = false;
-              seterrorModel(true);
-            });
+            } else if (!data.ok) {
+              throw new Error("unable to receive data");
+            }
+          } catch (err) {
+            console.log(err);
+            passStatus = false;
+            seterrorModel(true);
+          }
+
+          // old method
+
+          // fetch(
+          //   "http://localhost:3030/api/formInformation/teachingCertificate",
+          //   {
+          //     method: "POST",
+          //     body: fd,
+          //   }
+          // )
+          //   .then((data) => {
+          //     console.log(data);
+          //     if (data.ok) {
+          //       return data.json();
+          //     }
+          //     throw new Error("unable to receive data");
+          //   })
+          //   .then((data) => {
+          //     console.log(data);
+          //     const newData = JSON.parse(data);
+          //     if (
+          //       newData.message == "validation error" ||
+          //       newData.message == "general error"
+          //     ) {
+          //       passStatus = false;
+          //       const newDataArray = [...teachingCertificatesArray];
+          //       const newDataErrorObject = {
+          //         ...newData.validationData,
+          //         certificateImageData: certificateImageData,
+          //       };
+          //       newDataArray[newData.elementIndexPosition] = newDataErrorObject;
+          //       setteachingCertificatesArray(newDataArray);
+          //     }
+          //     if (newData.message == "data received") {
+          //       const newDataArray = [...teachingCertificatesArray];
+          //       const newDataObject = {
+          //         ...newDataArray[newData.elementIndexPosition],
+          //         certificateImage: newData.certificateImage,
+          //       };
+          //       newDataArray[newData.elementIndexPosition] = newDataObject;
+          //       setteachingCertificatesArray(newDataArray);
+
+          //       if (
+          //         passStatus &&
+          //         indexPosition + 1 == teachingCertificatesArray.length
+          //       ) {
+          //         handleUpperLevelComponentData("Education", {
+          //           teachingCertificateDataArray: newDataArray,
+          //           teachingCertificateStatus: false,
+          //         });
+          //       }
+          //     }
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //     passStatus = false;
+          //     seterrorModel(true);
+          //   });
         }
       }
     }
@@ -260,6 +324,7 @@ export default function FormCertificationPage({
               parentIndex={index}
               handleCertificationDeleltion={handleCertificationDeleltion}
               handleCertificateImageError={handleCertificateImageError}
+              handleYearEndDataUpdation={handleYearEndDataUpdation}
             />
           ))}
         </div>
@@ -321,10 +386,11 @@ function TeachingCertificateDivs({
   handleImageParentData,
   handleCertificationDeleltion,
   handleCertificateImageError,
+  handleYearEndDataUpdation,
   parentIndex,
 }) {
   // setting for study year end
-  const dateArray = ["2000", "2001", "2002", "2003"];
+  const dateArray = ["", "2000", "2001", "2002", "2003"];
   const [studyYearEndArray, setstudyYearEndArray] = useState(dateArray);
 
   const handleStudyYearStartData = (e) => {
@@ -332,8 +398,9 @@ function TeachingCertificateDivs({
 
     const dataIndex = newData.indexOf(e.target.value);
     // console.log(newData.splice(dataIndex));
-    setstudyYearEndArray(newData.splice(dataIndex));
-    handleParentData(e, parentIndex);
+    const listToUpdate = newData.splice(dataIndex);
+    setstudyYearEndArray(listToUpdate);
+    handleYearEndDataUpdation(e.target.value, listToUpdate[0], parentIndex);
   };
 
   // handling image data
@@ -474,9 +541,8 @@ function TeachingCertificateDivs({
               name="endStudyYear"
               value={parentData.endStudyYear}
               onChange={(e) => handleParentData(e, parentIndex)}
-              disabled={parentData.startStudyYear ? false : true}
+              disabled={parentData.startStudyYear == "" ? true : false}
             >
-              <option value=""></option>
               {studyYearEndArray.map((element, index) => (
                 <option key={`yearEndArrayIndex${index}`} value={element}>
                   {element}

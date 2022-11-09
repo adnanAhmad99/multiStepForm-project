@@ -9,7 +9,7 @@ export default function FormEducationPage({
     upperLevelDataContainer.educationCertificateArray
   );
   const [educationCertificateStatus, setEducationCertificateStatus] = useState(
-    upperLevelDataContainer.educationCertificateStatus
+    upperLevelDataContainer.noEducationCertificateStatus
   );
 
   const [formUploadingStatus, setformUploadingStatus] = useState("");
@@ -54,7 +54,20 @@ export default function FormEducationPage({
     seteducationCertificatesArray(newDataArray);
   };
 
-  const handleDataSending = () => {
+  const handleYearEndDataUpdation = (startValue, endValue, indexposition) => {
+    const newDataArray = [...educationCertificatesArray];
+    const newDataEntered = {
+      ...newDataArray[indexposition],
+      ["startStudyYear"]: startValue,
+      ["endStudyYear"]: endValue,
+    };
+
+    newDataArray[indexposition] = newDataEntered;
+
+    seteducationCertificatesArray(newDataArray);
+  };
+
+  const handleDataSending = async () => {
     // checking validations
     const internalErrorArray = [];
     let errorStatus = false;
@@ -88,6 +101,7 @@ export default function FormEducationPage({
           internalDataObject.specializationError = "";
         }
         if (!data.startStudyYear || !data.endStudyYear) {
+          console.log("error running");
           internalDataObject.studyYearError = "This field is required";
           errorStatus = true;
         } else {
@@ -108,6 +122,10 @@ export default function FormEducationPage({
       if (educationCertificateStatus) {
         const fd = new FormData();
         fd.append("noEducationCertificate", true);
+
+        handleUpperLevelComponentData("Description", {
+          noEducationCertificateStatus: false,
+        });
 
         fetch(
           "http://localhost:3030/api/formInformation/educationCertificate",
@@ -130,13 +148,14 @@ export default function FormEducationPage({
             seterrorModel(true);
           });
       } else {
+        let passStatus = true;
         for (let [
           indexPosition,
           dataToSend,
         ] of educationCertificatesArray.entries()) {
           const fd = new FormData();
 
-          const degreeImageData = dataToSend.degreeImageData;
+          const degreeImageData = dataToSend.degreeImageData || {};
 
           delete dataToSend.degreeImageData;
 
@@ -155,7 +174,7 @@ export default function FormEducationPage({
           // console.log(!degreeImageData.name);
           // console.log(typeof degreeImageData);
           // console.log(degreeImageData);
-          console.log(degreeImageData);
+          // console.log(degreeImageData);
           if (degreeImageData.name) {
             console.log("sending certificate");
             fd.append(
@@ -165,26 +184,27 @@ export default function FormEducationPage({
             );
           }
 
-          fetch(
-            "http://localhost:3030/api/formInformation/educationCertificate",
-            {
-              method: "POST",
-              body: fd,
-            }
-          )
-            .then((data) => {
-              if (data.ok) {
-                return data.json();
+          //new method
+
+          try {
+            const data = await fetch(
+              "http://localhost:3030/api/formInformation/educationCertificate",
+              {
+                method: "POST",
+                body: fd,
               }
-              throw new Error("unable to receive data");
-            })
-            .then((data) => {
-              console.log(data);
-              const newData = JSON.parse(data);
+            );
+
+            if (data.ok) {
+              const dataReceived = await data.json();
+              const newData = JSON.parse(dataReceived);
+              console.log(newData);
+
               if (
                 newData.message == "validation error" ||
                 newData.message == "general error"
               ) {
+                passStatus = false;
                 const newDataArray = [...educationCertificatesArray];
                 const newDataErrorObject = {
                   ...newData.validationData,
@@ -193,11 +213,93 @@ export default function FormEducationPage({
                 newDataArray[newData.elementIndexPosition] = newDataErrorObject;
                 seteducationCertificatesArray(newDataArray);
               }
-            })
-            .catch((err) => {
-              console.log(err);
-              seterrorModel(true);
-            });
+
+              // check this
+              if (newData.message == "data received") {
+                const newDataArray = [...educationCertificatesArray];
+                const newDataObject = {
+                  ...newDataArray[newData.elementIndexPosition],
+                  educationCetificateImage: newData.educationCetificateImage,
+                };
+                newDataArray[newData.elementIndexPosition] = newDataObject;
+                seteducationCertificatesArray(newDataArray);
+
+                if (
+                  passStatus &&
+                  indexPosition + 1 == educationCertificatesArray.length
+                ) {
+                  handleUpperLevelComponentData("Description", {
+                    educationCertificateArray: newDataArray,
+                    noEducationCertificateStatus: false,
+                  });
+                }
+              }
+            } else if (!data.ok) {
+              throw new Error("unable to receive data");
+            }
+          } catch (err) {
+            console.log(err);
+            passStatus = false;
+            seterrorModel(true);
+          }
+
+          // fetch(
+          //   "http://localhost:3030/api/formInformation/educationCertificate",
+          //   {
+          //     method: "POST",
+          //     body: fd,
+          //   }
+          // )
+          //   .then((data) => {
+          //     console.log(data);
+          //     if (data.ok) {
+          //       return data.json();
+          //     }
+          //     throw new Error("unable to receive data");
+          //   })
+          //   .then((data) => {
+          //     console.log(data);
+          //     const newData = JSON.parse(data);
+          //     if (
+          //       newData.message == "validation error" ||
+          //       newData.message == "general error"
+          //     ) {
+          //       passStatus = false;
+          //       const newDataArray = [...educationCertificatesArray];
+          //       const newDataErrorObject = {
+          //         ...newData.validationData,
+          //         degreeImageData: degreeImageData,
+          //       };
+          //       newDataArray[newData.elementIndexPosition] = newDataErrorObject;
+          //       seteducationCertificatesArray(newDataArray);
+          //     }
+
+          //     // check this
+          //     if (newData.message == "data received") {
+          //       const newDataArray = [...educationCertificatesArray];
+          //       const newDataObject = {
+          //         ...newDataArray[newData.elementIndexPosition],
+          //         educationCetificateImage: newData.educationCetificateImage,
+          //       };
+          //       newDataArray[newData.elementIndexPosition] = newDataObject;
+          //       seteducationCertificatesArray(newDataArray);
+
+          //       if (
+          //         passStatus &&
+          //         indexPosition + 1 == educationCertificatesArray.length
+          //       ) {
+          //         handleUpperLevelComponentData("Education", {
+          //           educationCertificateArray: newDataArray,
+          //           noEducationCertificateStatus: false,
+          //         });
+          //       }
+          //     }
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //     passStatus = false;
+          //     seterrorModel(true);
+          //   });
         }
       }
     }
@@ -224,6 +326,7 @@ export default function FormEducationPage({
                 handleEducationCertificateDeleltion
               }
               handleEducationImageError={handleEducationImageError}
+              handleYearEndDataUpdation={handleYearEndDataUpdation}
             />
           ))}
         </div>
@@ -287,10 +390,11 @@ function EducationCertificateDivs({
   handleImageParentData,
   handleEducationCertificateDeleltion,
   handleEducationImageError,
+  handleYearEndDataUpdation,
   parentIndex,
 }) {
   // setting for study year end
-  const dateArray = ["2000", "2001", "2002", "2003"];
+  const dateArray = ["", "2000", "2001", "2002", "2003"];
   const [studyYearEndArray, setstudyYearEndArray] = useState(dateArray);
 
   const handleStudyYearStartData = (e) => {
@@ -298,8 +402,9 @@ function EducationCertificateDivs({
 
     const dataIndex = newData.indexOf(e.target.value);
     // console.log(newData.splice(dataIndex));
-    setstudyYearEndArray(newData.splice(dataIndex));
-    handleParentData(e, parentIndex);
+    const listToUpdate = newData.splice(dataIndex);
+    setstudyYearEndArray(listToUpdate);
+    handleYearEndDataUpdation(e.target.value, listToUpdate[0], parentIndex);
   };
 
   // handling image data
@@ -433,7 +538,7 @@ function EducationCertificateDivs({
               name="endStudyYear"
               value={parentData.endStudyYear}
               onChange={(e) => handleParentData(e, parentIndex)}
-              disabled={parentData.startStudyYear ? false : true}
+              disabled={parentData.startStudyYear == "" ? true : false}
             >
               {studyYearEndArray.map((element, index) => (
                 <option key={`yearEndArrayIndex${index}`} value={element}>
