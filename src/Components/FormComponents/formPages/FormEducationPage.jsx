@@ -125,6 +125,7 @@ export default function FormEducationPage({
 
         handleUpperLevelComponentData("Description", {
           noEducationCertificateStatus: false,
+          formStepLevel: 5,
         });
 
         fetch(
@@ -231,6 +232,7 @@ export default function FormEducationPage({
                   handleUpperLevelComponentData("Description", {
                     educationCertificateArray: newDataArray,
                     noEducationCertificateStatus: false,
+                    formStepLevel: 5,
                   });
                 }
               }

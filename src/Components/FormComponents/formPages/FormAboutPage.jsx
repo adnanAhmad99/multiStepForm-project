@@ -197,6 +197,7 @@ export default function FormAboutPage({
             handleUpperLevelComponentData("Photo", {
               ...mainDataContainer,
               customerID: newData.customerID,
+              formStepLevel: 2,
             });
           }, 1500);
         }

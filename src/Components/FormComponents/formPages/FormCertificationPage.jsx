@@ -147,6 +147,7 @@ export default function FormCertificationPage({
               console.log("running");
               handleUpperLevelComponentData("Education", {
                 teachingCertificateStatus: true,
+                formStepLevel: 4,
               });
             }
           })
@@ -231,6 +232,7 @@ export default function FormCertificationPage({
                   handleUpperLevelComponentData("Education", {
                     teachingCertificateDataArray: newDataArray,
                     teachingCertificateStatus: false,
+                    formStepLevel: 4,
                   });
                 }
               }

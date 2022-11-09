@@ -91,7 +91,10 @@ export default function FormDescriptionPage({
           }
           if (newData.message == "data received") {
             // console.log("passed");
-            handleUpperLevelComponentData("Video", mainInternalDataObject);
+            handleUpperLevelComponentData("Video", {
+              ...mainInternalDataObject,
+              formStepLevel: 6,
+            });
           }
         })
         .catch((err) => {

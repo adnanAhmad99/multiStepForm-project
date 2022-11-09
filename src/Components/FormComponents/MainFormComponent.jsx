@@ -148,6 +148,7 @@ export default function MainFormComponent() {
         educationCetificateImage: "",
       },
     ],
+    formStepLevel: 1,
   });
   const [errorModel, seterrorModel] = useState(true);
 

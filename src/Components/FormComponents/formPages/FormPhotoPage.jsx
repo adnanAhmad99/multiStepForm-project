@@ -38,6 +38,7 @@ export default function FormPhotoPage({
           if (newData.message == "image received") {
             handleUpperLevelComponentData("Certification", {
               profileImage: newData.imageName,
+              formStepLevel: 3,
             });
           }
         })
