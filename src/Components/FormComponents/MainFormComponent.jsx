@@ -6,7 +6,7 @@ import FormDescriptionPage from "./formPages/FormDescriptionPage";
 import FormEducationPage from "./formPages/FormEducationPage";
 import FormPhotoPage from "./formPages/FormPhotoPage";
 import FormSubmitedPage from "./formPages/FormSubmitedPage";
-import FormVideoPage from "./formPages/FormVideoPAge";
+import FormVideoPage from "./formPages/FormVideoPage";
 import "./formStyle.css";
 import UpperProgressCounter from "./UpperProgressCounter";
 
@@ -150,7 +150,7 @@ export default function MainFormComponent() {
     ],
     formStepLevel: 1,
   });
-  const [errorModel, seterrorModel] = useState(true);
+  const [errorModel, seterrorModel] = useState(false);
 
   useEffect(() => {
     console.log("upperLevelDataContainer", upperLevelDataContainer);

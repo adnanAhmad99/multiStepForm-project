@@ -467,3 +467,44 @@ input[type="range"] {
 .timingsDeleteButton {
   fill: rgb(59, 179, 189);
 }
+
+/* video page styling */
+.videoPageArticle {
+  max-width: 600px;
+  padding: 1rem;
+  background-color: #fff;
+}
+.videoMainDiv {
+  background-color: rgb(56 54 54);
+  width: 100%;
+  height: 350px;
+  margin: 0.5rem 0rem;
+}
+.videoMainDiv > * {
+  width: 100%;
+  height: 100%;
+}
+.videoPageBtnsDiv {
+  margin: 0.5rem 0rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.btnStart {
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: green;
+  color: #fff;
+  border: none;
+}
+.btnStop {
+  display: inline-block;
+  font-size: 1.1rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  margin: 0.5rem 0rem;
+  background-color: red;
+  color: #fff;
+  border: none;
+}

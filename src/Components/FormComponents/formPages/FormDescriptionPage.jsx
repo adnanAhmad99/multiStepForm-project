@@ -112,16 +112,13 @@ export default function FormDescriptionPage({
       <div className="descriptionPageProfileInfoDiv">
         <div className="profileImageDiv">
           <img
-            // src={`http://localhost:3030${upperLevelDataContainer.profileImage}`}
-            src={`http://localhost:3030/profilePictures/profile-1667396730143-2img.jpg`}
-            alt=""
+            src={`http://localhost:3030${upperLevelDataContainer.profileImage}`}
           />
         </div>
         <div className="profileInfo">
           <h4>
-            {/* {upperLevelDataContainer.firstName}{" "}
-            {upperLevelDataContainer.lastName} */}
-            adsfd asdfadf
+            {upperLevelDataContainer.firstName}{" "}
+            {upperLevelDataContainer.lastName}
           </h4>
           <input
             type="text"
