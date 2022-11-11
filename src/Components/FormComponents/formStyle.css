@@ -256,6 +256,7 @@
 .imageUploaderDiv {
   display: flex;
   gap: 0.5rem;
+  margin: 0.5rem 0rem;
 }
 .imageUploaderDiv > button {
   padding: 0.5rem 1rem;

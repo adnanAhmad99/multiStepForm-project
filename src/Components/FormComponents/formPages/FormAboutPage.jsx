@@ -30,20 +30,15 @@ export default function FormAboutPage({
   });
 
   // state for phone number
-  const [phoneNumber, setphoneNumber] = useState();
+  const [phoneNumber, setphoneNumber] = useState(upperLevelDataContainer.phone);
 
   // state for age confirmation
   const [ageConfirmation, setageConfirmation] = useState(false);
 
   // state for languages
-  const [languagesArray, setlanguagesArray] = useState([
-    {
-      languageValue: "EN",
-      languageValueError: "",
-      languageLevel: "choseLevel",
-      languageLevelError: "",
-    },
-  ]);
+  const [languagesArray, setlanguagesArray] = useState(
+    upperLevelDataContainer.languagesData
+  );
 
   // state for form status
   const [formStatus, setformStatus] = useState("");
@@ -105,6 +100,12 @@ export default function FormAboutPage({
     }
     if (!mainDataContainer.email) {
       internalErrorDataObj.email = "This field is required";
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+        mainDataContainer.email
+      )
+    ) {
+      internalErrorDataObj.email = "Please enter correct email";
     }
     if (!mainDataContainer.subjectTaught) {
       internalErrorDataObj.subjectTaught = "This field is required";
@@ -190,13 +191,13 @@ export default function FormAboutPage({
         }
         if (newData.message == "data received") {
           console.log("success");
+
           setformStatus("data updated successfull");
 
           setTimeout(() => {
             console.log("set timeout called");
             handleUpperLevelComponentData("Photo", {
-              ...mainDataContainer,
-              customerID: newData.customerID,
+              ...newData.customerData,
               formStepLevel: 2,
             });
           }, 1500);
@@ -219,6 +220,26 @@ export default function FormAboutPage({
   // useEffect(() => {
   //   console.log(mainDataContainer);
   // }, [mainDataContainer]);
+
+  useEffect(() => {
+    fetch("http://localhost:3030/api/formInformation")
+      .then((data) => {
+        if (data.ok) {
+          return data.json();
+        }
+        throw new Error("unable to receive data");
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.message == "data avalible") {
+          handleUpperLevelComponentData(data.customerData);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        seterrorModel(true);
+      });
+  }, []);
 
   return (
     <article className="aboutFormPage">
@@ -271,6 +292,7 @@ export default function FormAboutPage({
             onChange={handleInputValueChange}
             id="randomid:originCountry53256"
           >
+            <option value=""></option>
             <option value="Afghanistan">Afghanistan</option>
             <option value="Åland Islands">Åland Islands</option>
             <option value="Albania">Albania</option>

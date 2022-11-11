@@ -9,6 +9,9 @@ export default function FormVideoPage({
   seterrorModel,
 }) {
   const [cameraTest, setcameraTest] = useState(false);
+  const [videoUrl, setvideoUrl] = useState(
+    `http://localhost:3030${upperLevelDataContainer.introductionVideo}`
+  );
   const [videoError, setvideoError] = useState(false);
   const [videoTimer, setvideoTimer] = useState(0);
   const [startVideoTimer, setstartVideoTimer] = useState(false);
@@ -44,29 +47,44 @@ export default function FormVideoPage({
     setloading(true);
     const video = await fetch(mediaBlobUrl).then((data) => data.blob());
     console.log(video);
-    // const fd = new FormData();
-    // fd.append("video", video, "introvideo.mp4");
+    const fd = new FormData();
+    fd.append("video", video, "introvideo.mp4");
 
-    // fetch("http://localhost:3030/api/formInformation/video", {
-    //   method: "POST",
-    //   body: fd,
-    // })
-    //   .then((data) => {
-    //     console.log(data);
-    //     if (data.ok) {
-    //       return data.json();
-    //     }
-    //     throw new Error("unable to receive data");
-    //   })
-    //   .then((data) => {
-    //     // const newData =
-    //     console.log(data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    fetch("http://localhost:3030/api/formInformation/video", {
+      method: "POST",
+      body: fd,
+    })
+      .then((data) => {
+        console.log(data);
+        if (data.ok) {
+          return data.json();
+        }
+        throw new Error("unable to receive data");
+      })
+      .then((data) => {
+        console.log(data);
+        if (data.message == "no video file sent") {
+          setvideoError(true);
+        }
+        if (data.message == "video received") {
+          handleUpperLevelComponentData("Availability", {
+            introductionVideo: data.introductionVideo,
+            formStepLevel: 7,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        seterrorModel(true);
+      });
     setloading(false);
   };
+
+  useEffect(() => {
+    if (mediaBlobUrl) {
+      setvideoUrl(mediaBlobUrl);
+    }
+  }, [mediaBlobUrl]);
 
   useEffect(() => {
     if (startVideoTimer) {
@@ -76,6 +94,7 @@ export default function FormVideoPage({
     }
     if (!startVideoTimer) {
       clearInterval(timer.current);
+      setvideoTimer(0);
     }
 
     return () => {
@@ -100,8 +119,14 @@ export default function FormVideoPage({
       </p>
       <div>
         <div className="videoMainDiv">
-          {cameraTest || status == "recording" ? <Webcam /> : null}
-          {status == "stopped" && <video src={mediaBlobUrl} controls />}
+          {cameraTest || status == "recording" ? (
+            <Webcam />
+          ) : (
+            <video src={videoUrl} controls />
+          )}
+          {/* {status == "stopped" || videoUrl ? (
+            <video src={videoUrl} controls />
+          ) : null} */}
         </div>
         {status == "recording" ? (
           <div>

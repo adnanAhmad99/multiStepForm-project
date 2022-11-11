@@ -30,6 +30,15 @@ export default function MainFormComponent() {
     subjectTaught: "",
     teachingExperience: "",
     currentSituation: "",
+    languagesData: [
+      {
+        languageValue: "EN",
+        languageValueError: "",
+        languageLevel: "choseLevel",
+        languageLevelError: "",
+      },
+    ],
+    phone: "",
     ageConfirmtionError: false,
     profileImage: "",
     profileHeadline: "",
@@ -148,6 +157,7 @@ export default function MainFormComponent() {
         educationCetificateImage: "",
       },
     ],
+    introductionVideo: "",
     formStepLevel: 1,
   });
   const [errorModel, seterrorModel] = useState(false);

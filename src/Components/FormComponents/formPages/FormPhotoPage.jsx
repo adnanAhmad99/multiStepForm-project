@@ -113,7 +113,9 @@ export default function FormPhotoPage({
                 id="randomId:de2589023"
                 onChange={handleNewImage}
               />
-              <label htmlFor="randomId:de2589023">Upload photo</label>
+              <label className="fileUploadLabel" htmlFor="randomId:de2589023">
+                Upload photo
+              </label>
 
               <div className={selectedImageError ? "validationError" : null}>
                 <p>JPG or PNG format</p>
