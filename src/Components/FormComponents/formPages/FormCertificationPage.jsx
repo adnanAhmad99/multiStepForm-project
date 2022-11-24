@@ -15,7 +15,7 @@ export default function FormCertificationPage({
   // }, [teachingCertificatesArray]);
 
   const [teachingCertificateStatus, setTeachingCertificateStatus] = useState(
-    upperLevelDataContainer.teachingCertificateStatus
+    upperLevelDataContainer.noTeachingCertificateStatus
   );
 
   const [formUploadingStatus, setformUploadingStatus] = useState("");
@@ -130,7 +130,7 @@ export default function FormCertificationPage({
         const fd = new FormData();
         fd.append("noTeachingCertificate", true);
 
-        fetch("http://localhost:3030/api/formInformation/teachingCertificate", {
+        fetch("/api/formInformation/teachingCertificate", {
           method: "POST",
           body: fd,
         })
@@ -146,7 +146,7 @@ export default function FormCertificationPage({
             if (newData.message == "data received no teaching certificate") {
               console.log("running");
               handleUpperLevelComponentData("Education", {
-                teachingCertificateStatus: true,
+                noTeachingCertificateStatus: true,
                 formStepLevel: 4,
               });
             }
@@ -190,7 +190,7 @@ export default function FormCertificationPage({
           // new method
           try {
             const data = await fetch(
-              "http://localhost:3030/api/formInformation/teachingCertificate",
+              "/api/formInformation/teachingCertificate",
               {
                 method: "POST",
                 body: fd,
@@ -231,7 +231,7 @@ export default function FormCertificationPage({
                 ) {
                   handleUpperLevelComponentData("Education", {
                     teachingCertificateDataArray: newDataArray,
-                    teachingCertificateStatus: false,
+                    noTeachingCertificateStatus: false,
                     formStepLevel: 4,
                   });
                 }
@@ -407,9 +407,7 @@ function TeachingCertificateDivs({
 
   // handling image data
   const [imageData, setimageData] = useState(
-    parentData.certificateImage
-      ? `http://localhost:3030${parentData.certificateImage}`
-      : ""
+    parentData.certificateImage ? parentData.certificateImage : ""
   );
 
   const handleCertificateImageData = (e) => {

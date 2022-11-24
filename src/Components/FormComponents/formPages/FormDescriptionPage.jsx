@@ -73,7 +73,7 @@ export default function FormDescriptionPage({
         fd.append(key, value);
       }
 
-      fetch("http://localhost:3030/api/formInformation/discription", {
+      fetch("/api/formInformation/discription", {
         method: "POST",
         body: fd,
       })
@@ -111,9 +111,7 @@ export default function FormDescriptionPage({
       <h3>Description for English-speaking students</h3>
       <div className="descriptionPageProfileInfoDiv">
         <div className="profileImageDiv">
-          <img
-            src={`http://localhost:3030${upperLevelDataContainer.profileImage}`}
-          />
+          <img src={upperLevelDataContainer.profileImage} />
         </div>
         <div className="profileInfo">
           <h4>

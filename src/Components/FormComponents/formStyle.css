@@ -72,6 +72,15 @@
   display: flex;
   cursor: pointer;
 }
+.progressNavbarContainer > * {
+  cursor: pointer;
+}
+.noPointer {
+  cursor: default;
+}
+.noPointer > * {
+  cursor: default;
+}
 
 .numberSpan {
   display: flex;
@@ -231,7 +240,7 @@
   padding: 1rem;
 }
 
-.formPhotoAndTipsPage {
+/* .formPhotoAndTipsPage {
   display: grid;
   grid-template-columns: 1.3fr 0.8fr;
   grid-template-rows: 1fr;
@@ -241,18 +250,18 @@
   .formPhotoAndTipsPage {
     display: block;
   }
-}
+} */
 @media screen and (max-width: 600px) {
   .classDropzone {
     display: none;
   }
 }
-.photoTips {
-  /* width: 250px; */
+/* .photoTips {
+  width: 250px;
 }
 .photoTipsList {
   list-style: none;
-}
+} */
 .imageUploaderDiv {
   display: flex;
   gap: 0.5rem;
@@ -274,18 +283,18 @@
 
 .ImageShowerDiv {
   height: 300px;
-  /* width: 300px; */
-  width: auto;
+  width: 300px;
   position: relative;
   border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
   object-fit: contain;
+  margin: 0.5rem 0rem;
 }
 .ImageShowerDiv > img {
-  /* width: 100%; */
-  /* height: 100%; */
+  width: 100%;
+  height: 100%;
 }
 
 /* form certificate page */
@@ -508,4 +517,17 @@ input[type="range"] {
   background-color: red;
   color: #fff;
   border: none;
+}
+
+.formSubmitPage {
+  padding: 1rem;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.formSubmitPage > a {
+  display: inline-block;
+  text-decoration: none;
 }

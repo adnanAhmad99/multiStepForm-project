@@ -163,7 +163,7 @@ export default function FormAboutPage({
     //   console.log(data, fd.get(data));
     // }
 
-    fetch("http://localhost:3030/api/formInformation/about", {
+    fetch("/api/formInformation/about", {
       method: "POST",
       body: fd,
     })
@@ -175,6 +175,7 @@ export default function FormAboutPage({
       })
       .then((data) => {
         const newData = JSON.parse(data);
+        console.log(newData);
         console.log(newData);
         if (newData.message == "Error in validation") {
           if (newData.errorObject.formErrorMessage == "form error present") {
@@ -220,26 +221,6 @@ export default function FormAboutPage({
   // useEffect(() => {
   //   console.log(mainDataContainer);
   // }, [mainDataContainer]);
-
-  useEffect(() => {
-    fetch("http://localhost:3030/api/formInformation")
-      .then((data) => {
-        if (data.ok) {
-          return data.json();
-        }
-        throw new Error("unable to receive data");
-      })
-      .then((data) => {
-        console.log(data);
-        if (data.message == "data avalible") {
-          handleUpperLevelComponentData(data.customerData);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        seterrorModel(true);
-      });
-  }, []);
 
   return (
     <article className="aboutFormPage">

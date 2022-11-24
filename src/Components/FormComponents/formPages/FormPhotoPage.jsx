@@ -1,28 +1,29 @@
 import React, { useState, useRef } from "react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Dropzone from "react-dropzone";
-// import Cropper from "react-easy-crop";
 
 export default function FormPhotoPage({
   upperLevelDataContainer,
   handleUpperLevelComponentData,
   seterrorModel,
 }) {
-  const [selectedImage, setselectedImage] = useState("");
-  const [image, setimage] = useState(upperLevelDataContainer.profileImage);
+  const [selectedImage, setselectedImage] = useState(
+    upperLevelDataContainer.profileImage
+  );
+  const [image, setimage] = useState("");
   const [selectedImageError, setselectedImageError] = useState(false);
   const currentInput = useRef("");
 
-  useEffect(() => {
-    console.log(selectedImageError);
-  }, [selectedImageError]);
+  // useEffect(() => {
+  //   console.log(selectedImageError);
+  // }, [selectedImageError]);
 
   const handleImageSending = () => {
     if (image) {
       const fd = new FormData();
       console.log(image);
       fd.append("profilePic", image, image.name);
-      fetch("http://localhost:3030/api/formInformation/profilePicture", {
+      fetch("/api/formInformation/profilePicture", {
         method: "POST",
         body: fd,
       })
@@ -36,6 +37,7 @@ export default function FormPhotoPage({
           const newData = JSON.parse(data);
           console.log(newData);
           if (newData.message == "image received") {
+            console.log("going to next page");
             handleUpperLevelComponentData("Certification", {
               profileImage: newData.imageName,
               formStepLevel: 3,
@@ -104,7 +106,7 @@ export default function FormPhotoPage({
         <div className="photoArea">
           <h3>Make a great first Impression</h3>
           <p>Tutors who look friendly and professional get the most students</p>
-          {!selectedImage || image == "" ? (
+          {selectedImage == "" ? (
             <div className="imageUploaderDiv">
               <input
                 type="file"
@@ -124,7 +126,7 @@ export default function FormPhotoPage({
             </div>
           ) : null}
           <div className="mainDropdownZoneAndImageDislayer">
-            {!selectedImage || image == "" ? (
+            {selectedImage == "" ? (
               <Dropzone
                 onDrop={handleOnDrop}
                 multiple={false}
@@ -149,25 +151,26 @@ export default function FormPhotoPage({
                 )}
               </Dropzone>
             ) : null}
-            {image != "" ? (
+            {selectedImage != "" ? (
               <div className="imageEditorDiv">
                 <div className="ImageShowerDiv">
                   <img src={selectedImage} alt="" />
                 </div>
                 <button
+                  className="buttonStyling"
                   onClick={() => {
                     setselectedImage("");
                     setimage("");
                     setselectedImageError(false);
                   }}
                 >
-                  remove
+                  remove Image
                 </button>
               </div>
             ) : null}
           </div>
         </div>
-        <PhotoTipsComponent />
+        {/* <PhotoTipsComponent /> */}
       </div>
       <div className="navigationButtonDiv">
         <button onClick={() => handleUpperLevelComponentData("About", {})}>

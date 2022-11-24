@@ -2,6 +2,7 @@ import React from "react";
 
 export default function UpperProgressCounter({
   formPageNumber,
+  currentSteplevel,
   formPageName,
   mainProgressController,
   setmainProgressController,
@@ -13,8 +14,13 @@ export default function UpperProgressCounter({
         <span></span>
       </span>
       <div
-        className="progressNavbarContainer"
-        onClick={() => setmainProgressController(formPageName)}
+        className={`progressNavbarContainer ${
+          currentSteplevel < formPageNumber ? "noPointer" : ""
+        }`}
+        onClick={() => {
+          if (currentSteplevel < formPageNumber) return;
+          setmainProgressController(formPageName);
+        }}
       >
         <span
           className={

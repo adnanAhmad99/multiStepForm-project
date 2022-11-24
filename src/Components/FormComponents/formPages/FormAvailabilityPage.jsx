@@ -74,7 +74,7 @@ export default function FormAvailabilityPage({
     fd.append("timezone", timezone);
     fd.append("avalibilityTiming", JSON.stringify(avalibilityTimings));
 
-    fetch("http://localhost:3030/api/formInformation/avalibility", {
+    fetch("/api/formInformation/avalibility", {
       method: "POST",
       body: fd,
     })
@@ -91,9 +91,143 @@ export default function FormAvailabilityPage({
           settimezoneError(true);
         }
         if (newData.message == "data received") {
-          handleUpperLevelComponentData("Video", {
-            timezone,
-            avalibilityTimings,
+          handleUpperLevelComponentData("Submitted", {
+            firstName: "",
+            lastName: "",
+            email: "",
+            country: "",
+            subjectTaught: "",
+            teachingExperience: "",
+            currentSituation: "",
+            languagesData: [
+              {
+                languageValue: "EN",
+                languageValueError: "",
+                languageLevel: "choseLevel",
+                languageLevelError: "",
+              },
+            ],
+            phone: "",
+            ageConfirmtionError: false,
+            profileImage: "",
+            profileHeadline: "",
+            profileDescription: "",
+            profileExperienceDescription: "",
+            motivationDescripition: "",
+            certificateInitialData: {
+              subjectName: "",
+              subjectNameError: "",
+              certificateName: "",
+              certificateNameError: "",
+              certificateDescription: "",
+              certificateDescriptionError: "",
+              certificateIssuer: "",
+              certificateIssuerError: "",
+              startStudyYear: "",
+              endStudyYear: "",
+              studyYearError: "",
+              certificateImageData: {},
+              certificateimageError: false,
+              generalErrors: "",
+              certificateImage: "",
+            },
+            noTeachingCertificateStatus: false,
+            teachingCertificateDataArray: [
+              {
+                subjectName: "",
+                subjectNameError: "",
+                certificateName: "",
+                certificateNameError: "",
+                certificateDescription: "",
+                certificateDescriptionError: "",
+                certificateIssuer: "",
+                certificateIssuerError: "",
+                startStudyYear: "",
+                endStudyYear: "",
+                studyYearError: "",
+                certificateImageData: {},
+                certificateimageError: false,
+                generalErrors: "",
+                certificateImage: "",
+              },
+            ],
+            timezone: "",
+            avalibilityTimings: [
+              {
+                dayName: "Monday",
+                activeDay: true,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Tuesday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Wednesday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Thursday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Friday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Saturday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+              {
+                dayName: "Sunday",
+                activeDay: false,
+                timings: [{ timeStart: "09:00", timeEnd: "18:00" }],
+              },
+            ],
+            educationCertificateInitialData: {
+              universityName: "",
+              universityNameError: "",
+              degreeName: "",
+              degreeNameError: "",
+              degreeType: "",
+              degreeTypeError: "",
+              specialization: "",
+              specializationError: "",
+              startStudyYear: "",
+              endStudyYear: "",
+              studyYearError: "",
+              degreeImageData: {},
+              degreeimageError: false,
+              generalErrors: "",
+              educationCetificateImage: "",
+            },
+            noEducationCertificateStatus: false,
+            educationCertificateArray: [
+              {
+                universityName: "",
+                universityNameError: "",
+                degreeName: "",
+                degreeNameError: "",
+                degreeType: "",
+                degreeTypeError: "",
+                specialization: "",
+                specializationError: "",
+                startStudyYear: "",
+                endStudyYear: "",
+                studyYearError: "",
+                degreeImageData: {},
+                degreeimageError: false,
+                generalErrors: "",
+                educationCetificateImage: "",
+              },
+            ],
+            introductionVideo: "",
+            formStepLevel: 1,
           });
         }
       })

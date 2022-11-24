@@ -10,7 +10,7 @@ export default function FormVideoPage({
 }) {
   const [cameraTest, setcameraTest] = useState(false);
   const [videoUrl, setvideoUrl] = useState(
-    `http://localhost:3030${upperLevelDataContainer.introductionVideo}`
+    upperLevelDataContainer.introductionVideo
   );
   const [videoError, setvideoError] = useState(false);
   const [videoTimer, setvideoTimer] = useState(0);
@@ -19,6 +19,7 @@ export default function FormVideoPage({
   const timer = useRef(null);
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ video: true });
+
   // funcitons
 
   const handleVideoStart = (e) => {
@@ -50,7 +51,7 @@ export default function FormVideoPage({
     const fd = new FormData();
     fd.append("video", video, "introvideo.mp4");
 
-    fetch("http://localhost:3030/api/formInformation/video", {
+    fetch("/api/formInformation/video", {
       method: "POST",
       body: fd,
     })
@@ -119,11 +120,14 @@ export default function FormVideoPage({
       </p>
       <div>
         <div className="videoMainDiv">
-          {cameraTest || status == "recording" ? (
+          {status == "idle" ? (
+            ""
+          ) : cameraTest || status == "recording" ? (
             <Webcam />
-          ) : (
+          ) : null}
+          {status != "recording" && videoUrl != "" ? (
             <video src={videoUrl} controls />
-          )}
+          ) : null}
           {/* {status == "stopped" || videoUrl ? (
             <video src={videoUrl} controls />
           ) : null} */}

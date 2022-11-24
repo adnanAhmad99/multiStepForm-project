@@ -124,17 +124,14 @@ export default function FormEducationPage({
         fd.append("noEducationCertificate", true);
 
         handleUpperLevelComponentData("Description", {
-          noEducationCertificateStatus: false,
+          noEducationCertificateStatus: true,
           formStepLevel: 5,
         });
 
-        fetch(
-          "http://localhost:3030/api/formInformation/educationCertificate",
-          {
-            method: "POST",
-            body: fd,
-          }
-        )
+        fetch("/api/formInformation/educationCertificate", {
+          method: "POST",
+          body: fd,
+        })
           .then((data) => {
             if (data.ok) {
               return data.json();
@@ -189,7 +186,7 @@ export default function FormEducationPage({
 
           try {
             const data = await fetch(
-              "http://localhost:3030/api/formInformation/educationCertificate",
+              "/api/formInformation/educationCertificate",
               {
                 method: "POST",
                 body: fd,
@@ -412,7 +409,7 @@ function EducationCertificateDivs({
   // handling image data
   const [imageData, setimageData] = useState(
     parentData.educationCetificateImage
-      ? `http://localhost:3030${parentData.educationCetificateImage}`
+      ? parentData.educationCetificateImage
       : null
   );
 
