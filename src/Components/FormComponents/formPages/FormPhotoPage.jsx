@@ -21,7 +21,7 @@ export default function FormPhotoPage({
   const handleImageSending = () => {
     if (image) {
       const fd = new FormData();
-      console.log(image);
+      // console.log(image);
       fd.append("profilePic", image, image.name);
       fetch("/api/formInformation/profilePicture", {
         method: "POST",
@@ -35,9 +35,9 @@ export default function FormPhotoPage({
         })
         .then((data) => {
           const newData = JSON.parse(data);
-          console.log(newData);
+          // console.log(newData);
           if (newData.message == "image received") {
-            console.log("going to next page");
+            // console.log("going to next page");
             handleUpperLevelComponentData("Certification", {
               profileImage: newData.imageName,
               formStepLevel: 3,
@@ -45,7 +45,7 @@ export default function FormPhotoPage({
           }
         })
         .catch((err) => {
-          console.log(err.message);
+          // console.log(err.message);
           seterrorModel(true);
         });
     } else {

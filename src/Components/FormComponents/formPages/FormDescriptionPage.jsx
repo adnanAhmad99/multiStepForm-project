@@ -61,11 +61,11 @@ export default function FormDescriptionPage({
       internalErrorObject.couterError = false;
     }
 
-    console.log(internalErrorObject);
+    // console.log(internalErrorObject);
     setvalidationError(internalErrorObject);
 
     if (!Object.keys(internalErrorObject).length) {
-      console.log("validation passed");
+      // console.log("validation passed");
 
       const fd = new FormData();
 
@@ -85,7 +85,7 @@ export default function FormDescriptionPage({
         })
         .then((data) => {
           const newData = JSON.parse(data);
-          console.log(newData);
+          // console.log(newData);
           if (newData.message == "validation error") {
             setvalidationError(newData.validationError);
           }
@@ -98,7 +98,7 @@ export default function FormDescriptionPage({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           seterrorModel(true);
         });
     }

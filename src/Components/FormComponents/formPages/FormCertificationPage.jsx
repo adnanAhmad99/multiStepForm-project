@@ -33,8 +33,8 @@ export default function FormCertificationPage({
   };
 
   const handleImageFileUploadData = (indexposition, imageData) => {
-    console.log(imageData);
-    console.log(indexposition);
+    // console.log(imageData);
+    // console.log(indexposition);
     const newDataArray = [...teachingCertificatesArray];
     const newDataEntered = {
       ...newDataArray[indexposition],
@@ -123,7 +123,7 @@ export default function FormCertificationPage({
     }
 
     if (!errorStatus) {
-      console.log("validation passed");
+      // console.log("validation passed");
       setformUploadingStatus("loading...");
 
       if (teachingCertificateStatus) {
@@ -141,10 +141,10 @@ export default function FormCertificationPage({
             throw new Error("unable to receive data");
           })
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             const newData = JSON.parse(data);
             if (newData.message == "data received no teaching certificate") {
-              console.log("running");
+              // console.log("running");
               handleUpperLevelComponentData("Education", {
                 noTeachingCertificateStatus: true,
                 formStepLevel: 4,
@@ -152,7 +152,7 @@ export default function FormCertificationPage({
             }
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
             seterrorModel(true);
           });
       } else {
@@ -179,7 +179,7 @@ export default function FormCertificationPage({
           }
 
           if (certificateImageData.name) {
-            console.log("sending certificate");
+            // console.log("sending certificate");
             fd.append(
               "certificateImage",
               certificateImageData,
@@ -197,12 +197,12 @@ export default function FormCertificationPage({
               }
             );
 
-            console.log(data);
+            // console.log(data);
             if (data.ok) {
               const dataReceived = await data.json();
 
               const newData = JSON.parse(dataReceived);
-              console.log(newData);
+              // console.log(newData);
               if (
                 newData.message == "validation error" ||
                 newData.message == "general error"
@@ -240,7 +240,7 @@ export default function FormCertificationPage({
               throw new Error("unable to receive data");
             }
           } catch (err) {
-            console.log(err);
+            // console.log(err);
             passStatus = false;
             seterrorModel(true);
           }
@@ -421,12 +421,12 @@ function TeachingCertificateDivs({
 
     // image validation checking
     if (!acceptedExt.includes(currentImage.type)) {
-      console.log("type checking");
+      // console.log("type checking");
       handleCertificateImageError(parentIndex, true);
 
       return;
     } else if (currentImage.size >= 20000000) {
-      console.log("size checking");
+      // console.log("size checking");
       handleCertificateImageError(parentIndex, true);
       return;
     }
@@ -438,7 +438,7 @@ function TeachingCertificateDivs({
     setimageData(imageUrl);
 
     // console.log(currentImage);
-    console.log(parentIndex);
+    // console.log(parentIndex);
     handleImageParentData(parentIndex, currentImage);
   };
 

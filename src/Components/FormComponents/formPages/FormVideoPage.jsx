@@ -36,7 +36,7 @@ export default function FormVideoPage({
   };
 
   const handleVideoSending = async () => {
-    console.log(mediaBlobUrl);
+    // console.log(mediaBlobUrl);
     // validation
     if (!mediaBlobUrl) {
       setvideoError(true);
@@ -47,7 +47,7 @@ export default function FormVideoPage({
     // data sending
     setloading(true);
     const video = await fetch(mediaBlobUrl).then((data) => data.blob());
-    console.log(video);
+    // console.log(video);
     const fd = new FormData();
     fd.append("video", video, "introvideo.mp4");
 
@@ -56,14 +56,14 @@ export default function FormVideoPage({
       body: fd,
     })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.ok) {
           return data.json();
         }
         throw new Error("unable to receive data");
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.message == "no video file sent") {
           setvideoError(true);
         }
@@ -75,7 +75,7 @@ export default function FormVideoPage({
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         seterrorModel(true);
       });
     setloading(false);

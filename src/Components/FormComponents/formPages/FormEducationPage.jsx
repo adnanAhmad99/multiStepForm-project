@@ -27,7 +27,7 @@ export default function FormEducationPage({
   };
 
   const handleImageFileUploadData = (indexposition, imageData) => {
-    console.log(imageData);
+    // console.log(imageData);
     const newDataArray = [...educationCertificatesArray];
     const newDataEntered = {
       ...newDataArray[indexposition],
@@ -101,7 +101,7 @@ export default function FormEducationPage({
           internalDataObject.specializationError = "";
         }
         if (!data.startStudyYear || !data.endStudyYear) {
-          console.log("error running");
+          // console.log("error running");
           internalDataObject.studyYearError = "This field is required";
           errorStatus = true;
         } else {
@@ -116,7 +116,7 @@ export default function FormEducationPage({
     }
 
     if (!errorStatus) {
-      console.log("validation passed");
+      // console.log("validation passed");
       setformUploadingStatus("loading...");
 
       if (educationCertificateStatus) {
@@ -139,10 +139,14 @@ export default function FormEducationPage({
             throw new Error("unable to receive data");
           })
           .then((data) => {
-            console.log(data);
+            // console.log(data);
+            handleUpperLevelComponentData("Description", {
+              noEducationCertificateStatus: true,
+              formStepLevel: 5,
+            });
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
             seterrorModel(true);
           });
       } else {
@@ -174,7 +178,7 @@ export default function FormEducationPage({
           // console.log(degreeImageData);
           // console.log(degreeImageData);
           if (degreeImageData.name) {
-            console.log("sending certificate");
+            // console.log("sending certificate");
             fd.append(
               "certificateImage",
               degreeImageData,
@@ -196,7 +200,7 @@ export default function FormEducationPage({
             if (data.ok) {
               const dataReceived = await data.json();
               const newData = JSON.parse(dataReceived);
-              console.log(newData);
+              // console.log(newData);
 
               if (
                 newData.message == "validation error" ||
@@ -237,7 +241,7 @@ export default function FormEducationPage({
               throw new Error("unable to receive data");
             }
           } catch (err) {
-            console.log(err);
+            // console.log(err);
             passStatus = false;
             seterrorModel(true);
           }
@@ -424,12 +428,12 @@ function EducationCertificateDivs({
 
     // image validation checking
     if (!acceptedExt.includes(currentImage.type)) {
-      console.log("type checking");
+      // console.log("type checking");
       handleEducationImageError(parentIndex, true);
 
       return;
     } else if (currentImage.size >= 20000000) {
-      console.log("size checking");
+      // console.log("size checking");
       handleEducationImageError(parentIndex, true);
       return;
     }

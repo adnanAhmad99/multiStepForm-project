@@ -148,7 +148,7 @@ export default function FormAboutPage({
       Object.keys(internalErrorDataObj).length > 0 ||
       languageValidationState
     ) {
-      console.log("validation failed");
+      // console.log("validation failed");
       return;
     }
     console.log("validation passed");
@@ -175,8 +175,6 @@ export default function FormAboutPage({
       })
       .then((data) => {
         const newData = JSON.parse(data);
-        console.log(newData);
-        console.log(newData);
         if (newData.message == "Error in validation") {
           if (newData.errorObject.formErrorMessage == "form error present") {
             setmainValidationError(newData.errorObject.formErrorObj);
@@ -191,28 +189,28 @@ export default function FormAboutPage({
           return;
         }
         if (newData.message == "data received") {
-          console.log("success");
+          // console.log("success");
 
           setformStatus("data updated successfull");
 
           setTimeout(() => {
-            console.log("set timeout called");
+            // console.log("set timeout called");
             handleUpperLevelComponentData("Photo", {
               ...newData.customerData,
               formStepLevel: 2,
             });
-          }, 1500);
+          }, 500);
         }
         if (newData.message == "Error updating Data") {
-          console.log("error updating database");
+          // console.log("error updating database");
           setformStatus("error updating data");
           setTimeout(() => {
             setformStatus("");
-          }, 1500);
+          }, 500);
         }
       })
       .catch((err) => {
-        console.error(err.message);
+        // console.error(err.message);
         seterrorModel(true);
       });
   };

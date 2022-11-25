@@ -79,7 +79,7 @@ export default function FormAvailabilityPage({
       body: fd,
     })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.ok) {
           return data.json();
         }
@@ -232,7 +232,7 @@ export default function FormAvailabilityPage({
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         seterrorModel(true);
       });
   };

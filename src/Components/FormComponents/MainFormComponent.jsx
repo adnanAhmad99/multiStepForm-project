@@ -26,22 +26,22 @@ export default function MainFormComponent() {
   const [errorModel, seterrorModel] = useState(false);
   const [loading, setloading] = useState(false);
 
-  useEffect(() => {
-    console.log("upperLevelDataContainer", upperLevelDataContainer);
-  }, [upperLevelDataContainer]);
+  // useEffect(() => {
+  //   console.log("upperLevelDataContainer", upperLevelDataContainer);
+  // }, [upperLevelDataContainer]);
 
   useEffect(() => {
     setloading(true);
     fetch("/api/formInformation")
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.ok) {
           return data.json();
         }
         throw new Error("unable to receive data");
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.message == "data avalible") {
           setupperLevelDataContainer(data.customerData);
         } else {
@@ -186,7 +186,7 @@ export default function MainFormComponent() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         seterrorModel(true);
       });
     setloading(false);
